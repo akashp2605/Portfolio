@@ -21,8 +21,9 @@ const grotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "DEV_NAME — Portfolio",
+  title: "Akash — Portfolio",
   description: "Full-stack developer portfolio. Building things that matter.",
+  icons: { icon: [] },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
