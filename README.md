@@ -1,8 +1,8 @@
-# ⚡ AKASH — Portfolio
+# ⚡ Akash — Portfolio
 
 A premium, futuristic developer portfolio inspired by cyberpunk interfaces and hacker aesthetics. Built with smooth animations, immersive interactions, and a modern UI to showcase projects and skills.
 
-> **Live Demo:** https://akashhportfolio.vercel.app
+> **Live Demo:** https://akashhhportfolio.vercel.app
 
 ---
 
