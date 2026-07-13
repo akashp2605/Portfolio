@@ -71,42 +71,58 @@ export const projects: Project[] = [
     ],
   },
 ];
+export type Tech = { name: string; color: string; icon: string };
 export type SkillGroup = {
   category: string;
-  skills: { name: string; level: number; icon?: string }[];
+  description: string;
+  accent: string;
+  techs: Tech[];
 };
 
 export const stack: SkillGroup[] = [
   {
-    category: "Languages",
-    skills: [
-      { name: "Java", level: 92 },
-      { name: "C", level: 85 },
-      { name: "Python", level: 70 },
+    category: "Backend",
+    description: "Building scalable RESTful applications using Java and Spring technologies.",
+    accent: "#00ff88",
+    techs: [
+      { name: "Java",            color: "#f89820", icon: "java" },
+      { name: "Spring Boot",     color: "#6db33f", icon: "springboot" },
+      { name: "Spring Security", color: "#6db33f", icon: "springsecurity" },
+      { name: "Hibernate",       color: "#bcae79", icon: "hibernate" },
+      { name: "REST API",        color: "#00ff88", icon: "rest" },
+      { name: "Maven",           color: "#c71a36", icon: "maven" },
     ],
   },
   {
     category: "Frontend",
-    skills: [
-      { name: "React / Next.js", level: 90 },
-      { name: "Tailwind CSS", level: 88 },
-      { name: "Framer Motion", level: 65 },
+    description: "Developing modern responsive user interfaces.",
+    accent: "#00e5ff",
+    techs: [
+      { name: "React.js",      color: "#61dafb", icon: "react" },
+      { name: "Next.js",       color: "#ffffff", icon: "nextjs" },
+      { name: "HTML5",         color: "#e34f26", icon: "html5" },
+      { name: "CSS3",          color: "#1572b6", icon: "css3" },
+      { name: "JavaScript",    color: "#f7df1e", icon: "javascript" },
     ],
   },
   {
-    category: "Backend",
-    skills: [
-      { name: "Node.js / Express", level: 88 },
-      { name: "MySQL", level: 85 },
-      { name: "Kafka", level: 72 },
+    category: "Databases",
+    description: "Designing reliable and scalable data storage solutions.",
+    accent: "#8b5cf6",
+    techs: [
+      { name: "MySQL",      color: "#4479a1", icon: "mysql" },
+      { name: "PostgreSQL", color: "#336791", icon: "postgresql" },
+      { name: "Redis",      color: "#dc382d", icon: "redis" },
+      { name: "Firebase",   color: "#ffca28", icon: "firebase" },
     ],
   },
   {
-    category: "Infrastructure",
-    skills: [
-      { name: "Docker / Kubernetes", level: 82 },
-      { name: "AWS", level: 78 },
-      { name: "CI/CD Pipelines", level: 70},
+    category: "Cloud & DevOps",
+    description: "Deploying and managing modern applications.",
+    accent: "#f59e0b",
+    techs: [
+      { name: "Docker",     color: "#2496ed", icon: "docker" },
+      { name: "Kubernetes", color: "#326ce5", icon: "kubernetes" },
     ],
   },
 ];

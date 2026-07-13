@@ -43,8 +43,8 @@ export default function StatusBar() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-40 h-7 flex items-center justify-between px-4 md:px-6 text-[10px] font-mono select-none border-t border-line-bright"
-      style={{ background: "rgba(5,5,5,0.95)", backdropFilter: "blur(10px)" }}
+      className="fixed bottom-0 left-0 right-0 z-40 h-7 flex items-center justify-between px-4 md:px-6 text-[10px] font-mono select-none border-t border-white/8"
+      style={{ background: "rgba(6,8,6,0.95)", backdropFilter: "blur(24px)", boxShadow: "0 -4px 24px rgba(0,0,0,0.5)" }}
     >
       <div className="flex items-center gap-4 overflow-hidden">
         <span className="flex items-center gap-1.5 text-green" style={{ textShadow: "0 0 6px #00ff88" }}>

@@ -3,14 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { identity } from "@/lib/data";
-
-// ── System init sequence ───────────────────────────────────
-const INIT_STEPS = [
-  { text: "ACCESSING SYSTEM...",          color: "#888",    duration: 400 },
-  { text: "VERIFYING CREDENTIALS...",     color: "#888",    duration: 500 },
-  { text: "AUTHENTICATION SUCCESSFUL",    color: "#00ff88", duration: 600 },
-  { text: "LOADING INTERFACE...",         color: "#888",    duration: 400 },
-];
+import ProfileImage from "@/components/ProfileImage";
 
 const CODE_LINES = [
   { code: `import { Developer } from "@/core";`,                    color: "#888" },
@@ -26,9 +19,7 @@ const CODE_LINES = [
 ];
 
 export default function Hero() {
-  const [initStep, setInitStep]     = useState(0);
-  const [initDone, setInitDone]     = useState(false);
-  const [scanDone, setScanDone]     = useState(false);
+  const [scanDone, setScanDone] = useState(false);
   const [roleIndex, setRoleIndex]   = useState(0);
   const [displayed, setDisplayed]   = useState("");
   const [deleting, setDeleting]     = useState(false);
@@ -40,16 +31,7 @@ export default function Hero() {
   const panelX = useTransform(mouseX, [-1, 1], [-8, 8]);
   const panelY = useTransform(mouseY, [-1, 1], [-5, 5]);
 
-  // ── Init sequence ──────────────────────────────────────
-  useEffect(() => {
-    let total = 0;
-    INIT_STEPS.forEach((step, i) => {
-      total += step.duration;
-      setTimeout(() => setInitStep(i + 1), total);
-    });
-    setTimeout(() => setInitDone(true), total + 300);
-    setTimeout(() => setScanDone(true), total + 900);
-  }, []);
+  useEffect(() => { setScanDone(true); }, []);
 
   // ── Typewriter ─────────────────────────────────────────
   useEffect(() => {
@@ -109,34 +91,14 @@ export default function Hero() {
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 pt-28 pb-16 grid lg:grid-cols-2 gap-16 items-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 pt-28 pb-16 grid lg:grid-cols-[1fr_auto] gap-12 xl:gap-20 items-center">
 
         {/* ── LEFT: Text content ── */}
         <div>
-          {/* Init sequence */}
-          <div className="mb-8 space-y-1 min-h-[88px]">
-            {INIT_STEPS.slice(0, initStep).map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.25 }}
-                className="flex items-center gap-3 font-mono text-[11px]"
-              >
-                <span className="text-dim">$</span>
-                <span style={{ color: step.color }}>{step.text}</span>
-                {i === initStep - 1 && !initDone && (
-                  <span className="inline-block w-1.5 h-3 bg-green blink" />
-                )}
-                {(i < initStep - 1 || initDone) && (
-                  <span className="ml-auto text-green-dim text-[10px]">
-                    {step.color === "#00ff88" ? "✓" : "OK"}
-                  </span>
-                )}
-              </motion.div>
-            ))}
+          {/* Mobile profile image — shown above content on small screens */}
+          <div className="flex justify-center mb-10 lg:hidden">
+            <ProfileImage scanDone={scanDone} />
           </div>
-
           {/* Main content — revealed after scan */}
           <AnimatePresence>
             {scanDone && (
@@ -264,15 +226,19 @@ export default function Hero() {
           </AnimatePresence>
         </div>
 
-        {/* ── RIGHT: Code panel with parallax ── */}
-        <motion.div
-          style={{ x: panelX, y: panelY }}
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: scanDone ? 1 : 0, x: scanDone ? 0 : 50 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="hidden lg:block"
-          data-cursor="card"
-        >
+        {/* ── RIGHT: Profile image + code panel ── */}
+        <div className="hidden lg:flex flex-col items-center gap-8">
+          <ProfileImage scanDone={scanDone} />
+
+          {/* Code panel */}
+          <motion.div
+            style={{ x: panelX, y: panelY }}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: scanDone ? 1 : 0, x: scanDone ? 0 : 50 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+            data-cursor="card"
+            className="w-full"
+          >
           <motion.div
             whileHover={{ scale: 1.015 }}
             transition={{ type: "spring", stiffness: 180, damping: 20 }}
@@ -350,7 +316,8 @@ export default function Hero() {
               {["0x4F2A", "PKT_OK", "ACK"][i]}
             </motion.div>
           ))}
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
 
       {/* ── Scroll indicator ── */}

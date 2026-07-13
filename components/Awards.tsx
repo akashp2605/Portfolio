@@ -41,9 +41,14 @@ export default function Awards() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              whileHover={{ scale: 1.02, borderColor: style.color }}
-              className="p-6 rounded-xl border border-line-bright transition-all relative overflow-hidden"
-              style={{ background: "rgba(13,13,13,0.8)" }}
+              whileHover={{ scale: 1.02, y: -4, boxShadow: `0 0 32px ${style.color}22, 0 20px 60px rgba(0,0,0,0.6)` }}
+              className="p-6 rounded-xl border transition-all relative overflow-hidden"
+              style={{
+                background: "rgba(12,15,12,0.85)",
+                backdropFilter: "blur(24px)",
+                borderColor: `${style.color}22`,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
+              }}
             >
               {/* Glow corner */}
               <div

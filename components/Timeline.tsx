@@ -61,9 +61,14 @@ export default function Timeline() {
               />
 
               <motion.div
-                whileHover={{ borderColor: entry.type === "work" ? "#00ff88" : "#8b5cf6", x: 4 }}
-                className="p-5 rounded-xl border border-line-bright transition-all"
-                style={{ background: "rgba(13,13,13,0.8)" }}
+                whileHover={{ x: 4, boxShadow: `0 0 24px ${entry.type === "work" ? "rgba(0,255,136,0.1)" : "rgba(139,92,246,0.1)"}, 0 16px 48px rgba(0,0,0,0.6)` }}
+                className="p-5 rounded-xl border transition-all"
+                style={{
+                  background: "rgba(12,15,12,0.85)",
+                  backdropFilter: "blur(24px)",
+                  borderColor: entry.type === "work" ? "rgba(0,255,136,0.15)" : "rgba(139,92,246,0.15)",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
+                }}
               >
                 <div className="flex flex-wrap items-center gap-3 mb-2">
                   <span

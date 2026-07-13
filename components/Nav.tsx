@@ -49,11 +49,13 @@ export default function Nav() {
         }`}
       >
         <div
-          className="mx-auto max-w-6xl px-6 flex items-center justify-between rounded-xl border border-line-bright"
+          className="mx-auto max-w-6xl px-6 flex items-center justify-between rounded-xl border border-white/10"
           style={{
-            background: "rgba(5,5,5,0.8)",
-            backdropFilter: "blur(20px)",
-            boxShadow: scrolled ? "0 0 30px rgba(0,255,136,0.05)" : "none",
+            background: scrolled ? "rgba(6,8,6,0.92)" : "rgba(6,8,6,0.75)",
+            backdropFilter: "blur(28px)",
+            boxShadow: scrolled
+              ? "0 4px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,255,136,0.1) inset"
+              : "0 2px 16px rgba(0,0,0,0.4)",
           }}
         >
           {/* Logo */}
@@ -70,8 +72,8 @@ export default function Nav() {
               <button
                 key={s.id}
                 onClick={() => scrollTo(s.id)}
-                className="relative px-3 py-1.5 font-mono text-[11px] tracking-widest transition-colors"
-                style={{ color: active === s.id ? "#00ff88" : "#888" }}
+                className="relative px-3 py-1.5 font-mono text-[11px] tracking-widest transition-colors hover:text-text"
+                style={{ color: active === s.id ? "#00ff88" : "#999" }}
               >
                 {s.label}
                 {active === s.id && (
@@ -117,15 +119,15 @@ export default function Nav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-20 left-4 right-4 z-40 rounded-xl border border-line-bright p-4 flex flex-col gap-2"
-            style={{ background: "rgba(5,5,5,0.95)", backdropFilter: "blur(20px)" }}
+            className="fixed top-20 left-4 right-4 z-40 rounded-xl border border-white/10 p-4 flex flex-col gap-2"
+            style={{ background: "rgba(6,8,6,0.97)", backdropFilter: "blur(28px)", boxShadow: "0 8px 32px rgba(0,0,0,0.6)" }}
           >
             {SECTIONS.map((s) => (
               <button
                 key={s.id}
                 onClick={() => scrollTo(s.id)}
                 className="text-left font-mono text-sm py-2 px-3 rounded transition-colors"
-                style={{ color: active === s.id ? "#00ff88" : "#888" }}
+                style={{ color: active === s.id ? "#00ff88" : "#999" }}
               >
                 <span className="text-green-dim mr-2">$</span>{s.label}
               </button>

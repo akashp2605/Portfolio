@@ -60,8 +60,8 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
         >
           <div
-            className="p-6 rounded-xl border border-line-bright font-mono text-sm mb-8"
-            style={{ background: "rgba(13,13,13,0.8)" }}
+            className="p-6 rounded-xl border border-white/8 font-mono text-sm mb-8"
+            style={{ background: "rgba(12,15,12,0.85)", backdropFilter: "blur(24px)", boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)" }}
           >
             <div className="text-dim mb-4 text-xs">$ cat contact.json</div>
             <div className="space-y-2 text-xs">
@@ -95,11 +95,11 @@ export default function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="rounded-xl border border-line-bright overflow-hidden"
-          style={{ background: "rgba(13,13,13,0.9)" }}
+          className="rounded-xl border border-white/8 overflow-hidden"
+          style={{ background: "rgba(12,15,12,0.88)", backdropFilter: "blur(24px)", boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)" }}
         >
           {/* Terminal header */}
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-line">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-white/6">
             <span className="w-2.5 h-2.5 rounded-full bg-red/50" />
             <span className="w-2.5 h-2.5 rounded-full bg-amber/50" />
             <span className="w-2.5 h-2.5 rounded-full bg-green/50" />
@@ -134,8 +134,9 @@ export default function Contact() {
                         onBlur={() => setFocused(null)}
                         className="w-full bg-bg border rounded px-3 py-2.5 font-mono text-sm text-text outline-none transition-all"
                         style={{
-                          borderColor: focused === field ? "#00ff88" : "#1a1a1a",
-                          boxShadow: focused === field ? "0 0 12px rgba(0,255,136,0.15)" : "none",
+                          borderColor: focused === field ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.08)",
+                          boxShadow: focused === field ? "0 0 16px rgba(0,255,136,0.15)" : "none",
+                          background: "rgba(6,8,6,0.8)",
                         }}
                       />
                     </div>
@@ -153,14 +154,15 @@ export default function Contact() {
                       onBlur={() => setFocused(null)}
                       className="w-full bg-bg border rounded px-3 py-2.5 font-mono text-sm text-text outline-none transition-all resize-none"
                       style={{
-                        borderColor: focused === "message" ? "#00ff88" : "#1a1a1a",
-                        boxShadow: focused === "message" ? "0 0 12px rgba(0,255,136,0.15)" : "none",
+                        borderColor: focused === "message" ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.08)",
+                        boxShadow: focused === "message" ? "0 0 16px rgba(0,255,136,0.15)" : "none",
+                        background: "rgba(6,8,6,0.8)",
                       }}
                     />
                   </div>
                   <motion.button
                     type="submit"
-                    whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(0,255,136,0.3)" }}
+                    whileHover={{ scale: 1.02, boxShadow: "0 0 28px rgba(0,255,136,0.45), 0 0 60px rgba(0,255,136,0.15)" }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full py-3 font-mono text-sm font-bold text-bg bg-green rounded transition-all"
                   >

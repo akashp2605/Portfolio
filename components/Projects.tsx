@@ -39,10 +39,13 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       animate={{ rotateX: tilt.x, rotateY: tilt.y }}
       style={{
         transformStyle: "preserve-3d",
-        background: "rgba(13,13,13,0.9)",
-        boxShadow: hovered ? `0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(0,255,136,0.08)` : "0 4px 20px rgba(0,0,0,0.3)",
+        background: "rgba(12,15,12,0.88)",
+        backdropFilter: "blur(24px)",
+        boxShadow: hovered
+          ? "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,255,136,0.18), 0 0 40px rgba(0,255,136,0.07)"
+          : "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
       }}
-      className="rounded-xl border border-line-bright overflow-hidden transition-shadow group"
+      className="rounded-xl border border-white/8 overflow-hidden transition-all group"
     >
       {/* Animated top border */}
       <div className="relative h-px w-full overflow-hidden">
@@ -55,7 +58,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       </div>
 
       {/* Window chrome */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-line">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/6">
         <div className="flex gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-red/50" />
           <span className="w-2.5 h-2.5 rounded-full bg-amber/50" />
@@ -79,8 +82,8 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           {project.stack.map((s) => (
             <motion.span
               key={s}
-              whileHover={{ borderColor: "#00ff88", color: "#00ff88" }}
-              className="px-2 py-1 font-mono text-[10px] border border-line-bright text-dim rounded transition-colors"
+              whileHover={{ borderColor: "rgba(0,255,136,0.5)", color: "#00ff88", boxShadow: "0 0 10px rgba(0,255,136,0.12)" }}
+              className="px-2 py-1 font-mono text-[10px] border border-white/8 text-dim rounded transition-all"
             >
               {s}
             </motion.span>
@@ -88,7 +91,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         </div>
 
         {/* Links */}
-        <div className="flex gap-4 mt-5 pt-4 border-t border-line">
+        <div className="flex gap-4 mt-5 pt-4 border-t border-white/6">
           {project.links.map((l) => (
             <motion.a
               key={l.label}

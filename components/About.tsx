@@ -52,8 +52,8 @@ export default function About() {
               {about.focusAreas.map((f) => (
                 <motion.span
                   key={f}
-                  whileHover={{ scale: 1.05, borderColor: "#00ff88", color: "#00ff88" }}
-                  className="px-3 py-1.5 font-mono text-xs border border-line-bright text-muted rounded transition-colors"
+                  className="px-3 py-1.5 font-mono text-xs border border-white/10 text-muted rounded transition-all"
+              whileHover={{ scale: 1.05, borderColor: "rgba(0,255,136,0.5)", color: "#00ff88", boxShadow: "0 0 12px rgba(0,255,136,0.15)" }}
                 >
                   {f}
                 </motion.span>
@@ -73,12 +73,12 @@ export default function About() {
           {about.stats.map((stat) => (
             <motion.div
               key={stat.label}
-              variants={item}
-              whileHover={{ scale: 1.03, borderColor: "#00ff88" }}
-              className="p-6 rounded-xl border border-line-bright transition-all"
+              whileHover={{ scale: 1.03, borderColor: "rgba(0,255,136,0.4)", boxShadow: "0 0 0 1px rgba(0,255,136,0.15), 0 20px 60px rgba(0,0,0,0.6)" }}
+              className="p-6 rounded-xl border border-white/8 transition-all"
               style={{
-                background: "rgba(13,13,13,0.8)",
-                backdropFilter: "blur(10px)",
+                background: "rgba(12,15,12,0.85)",
+                backdropFilter: "blur(24px)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
               }}
             >
               <div className="font-sans font-bold text-3xl text-green glow-green mb-2">
@@ -91,13 +91,13 @@ export default function About() {
           {/* Terminal card */}
           <motion.div
             variants={item}
-            className="col-span-2 p-5 rounded-xl border border-line-bright font-mono text-xs"
-            style={{ background: "rgba(13,13,13,0.8)" }}
+            className="col-span-2 p-5 rounded-xl border border-white/8 font-mono text-xs"
+            style={{ background: "rgba(12,15,12,0.85)", backdropFilter: "blur(24px)", boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)" }}
           >
             <div className="text-dim mb-3">$ whoami</div>
             <div className="space-y-1.5 text-muted">
-              <div><span className="text-green">role</span>     <span className="text-dim">→</span> Software Engineer</div>
-              <div><span className="text-cyan">location</span> <span className="text-dim">→</span> {"{LOCATION}"}</div>
+              <div><span className="text-green">role</span>     <span className="text-dim">→</span> SpringBoot Developer</div>
+              <div><span className="text-cyan">location</span> <span className="text-dim">→</span> Kuppam,Andhra Pradesh, India</div>
               <div><span className="text-purple">status</span>  <span className="text-dim">→</span> <span className="text-green">available</span></div>
             </div>
           </motion.div>
