@@ -165,32 +165,11 @@ export type Award = {
 
 export const awards: Award[] = [
   {
-    title: "HACKATHON_NAME — 1st Place",
-    issuer: "ORGANIZING_BODY",
-    date: "2024",
-    description: "Built PLACEHOLDER_PROJECT in 48 hours. Won best technical implementation out of 200+ teams.",
+    title: "To be Added",
+    issuer: "Coming Soon",
+    date: "#",
+    description: "To be added",
     type: "award",
-  },
-  {
-    title: "AWS Certified Solutions Architect",
-    issuer: "Amazon Web Services",
-    date: "2023",
-    description: "Professional-level certification covering cloud architecture, security, and cost optimization.",
-    type: "cert",
-  },
-  {
-    title: "CERTIFICATION_NAME",
-    issuer: "PLATFORM_NAME",
-    date: "2023",
-    description: "EDIT_ME — describe the scope and what you learned.",
-    type: "cert",
-  },
-  {
-    title: "OPEN_SOURCE_ACHIEVEMENT",
-    issuer: "GitHub",
-    date: "2022",
-    description: "EDIT_ME — e.g. reached X stars, merged into major project, etc.",
-    type: "achievement",
   },
 ];
 
