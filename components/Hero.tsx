@@ -6,17 +6,84 @@ import { identity } from "@/lib/data";
 import ProfileImage from "@/components/ProfileImage";
 
 const CODE_LINES = [
-  { code: `import { Developer } from "@/core";`,                    color: "#888" },
-  { code: ``,                                                        color: "" },
-  { code: `const profile: Developer = {`,                           color: "#888" },
-  { code: `  name:     "${identity.name}",`,                        color: "#00ff88" },
-  { code: `  status:   "available",`,                               color: "#00ff88" },
-  { code: `  passion:  "building things",`,                         color: "#00e5ff" },
-  { code: `  coffee:   Infinity,`,                                   color: "#8b5cf6" },
-  { code: `};`,                                                      color: "#888" },
-  { code: ``,                                                        color: "" },
-  { code: `export default profile;`,                                 color: "#888" },
+  { code: `import { Developer } from "@/core";`, color: "#888" },
+  { code: ``,                                    color: "" },
+  { code: `const profile: Developer = {`,        color: "#888" },
+  { code: `  name:     "${identity.name}",`,      color: "#00ff88" },
+  { code: `  status:   "available",`,             color: "#00ff88" },
+  { code: `  passion:  "building things",`,       color: "#00e5ff" },
+  { code: `  coffee:   Infinity,`,                color: "#8b5cf6" },
+  { code: `};`,                                   color: "#888" },
+  { code: ``,                                    color: "" },
+  { code: `export default profile;`,              color: "#888" },
 ];
+
+const STATS = [
+  { label: "PROJECTS", value: identity.projectsShipped },
+  { label: "CGPA",     value: "8.7" },
+  { label: "COFFEE",   value: identity.coffeeCount },
+];
+
+// ── Shared code panel ─────────────────────────────────────────────────────
+function CodePanel({ scanDone, compact = false }: { scanDone: boolean; compact?: boolean }) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.012 }}
+      transition={{ type: "spring", stiffness: 180, damping: 20 }}
+      className="rounded-xl overflow-hidden w-full"
+      style={{
+        background: "rgba(8,12,10,0.92)",
+        backdropFilter: "blur(16px)",
+        border: "1px solid rgba(0,255,136,0.12)",
+        boxShadow: "0 0 40px rgba(0,255,136,0.05), inset 0 1px 0 rgba(255,255,255,0.04)",
+      }}
+    >
+      <div className="flex items-center gap-2 px-3 py-2.5 border-b"
+        style={{ borderColor: "rgba(0,255,136,0.1)", background: "rgba(0,0,0,0.3)" }}>
+        <span className="w-2 h-2 rounded-full bg-red/50" />
+        <span className="w-2 h-2 rounded-full bg-amber/50" />
+        <span className="w-2 h-2 rounded-full bg-green/50" />
+        <span className="ml-2 font-mono text-[10px] text-dim">~/developer.ts</span>
+        <span className="ml-auto font-mono text-[9px] text-green-dim">● LIVE</span>
+      </div>
+
+      <div className={`${compact ? "p-3" : "p-5"} font-mono ${compact ? "text-[10px]" : "text-sm"} leading-relaxed`}>
+        {CODE_LINES.map((line, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: scanDone ? 1 : 0, x: scanDone ? 0 : -6 }}
+            transition={{ delay: 0.5 + i * 0.06, duration: 0.25 }}
+            className="flex gap-3 min-h-[1.4rem]"
+          >
+            <span className="select-none text-dim w-4 text-right shrink-0 pt-0.5 text-[9px]">
+              {line.code ? i + 1 : ""}
+            </span>
+            <span style={{ color: line.color || "transparent" }}>
+              {line.code
+                .replace(/(import|from|const|export|default)/g, (m) => `\u200B${m}\u200B`)
+                .split("\u200B")
+                .map((part, pi) =>
+                  ["import","from","const","export","default"].includes(part)
+                    ? <span key={pi} style={{ color: "#8b5cf6" }}>{part}</span>
+                    : <span key={pi}>{part}</span>
+                )}
+            </span>
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="px-3 py-2 border-t flex items-center justify-between"
+        style={{ borderColor: "rgba(0,255,136,0.08)", background: "rgba(0,0,0,0.2)" }}>
+        <span className="font-mono text-[9px] text-dim">TypeScript · UTF-8</span>
+        <span className="font-mono text-[9px] text-green-dim flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
+          No errors
+        </span>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Hero() {
   const [scanDone, setScanDone] = useState(false);
@@ -61,7 +128,7 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} id="hero" className="relative">
-      {/* Depth gradient layers */}
+      {/* Depth gradients */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#070a08] to-[#050508]" />
         <div className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full"
@@ -71,7 +138,7 @@ export default function Hero() {
         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#050505] to-transparent" />
       </div>
 
-      {/* Scan line on load */}
+      {/* Scan line */}
       <AnimatePresence>
         {!scanDone && (
           <motion.div
@@ -84,18 +151,15 @@ export default function Hero() {
         )}
       </AnimatePresence>
 
-      {/* ── Desktop + tablet: side-by-side grid, fills viewport ── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 pt-28 pb-16 min-h-screen
-                      flex flex-col justify-center
-                      lg:grid lg:grid-cols-[1fr_auto] lg:gap-12 xl:gap-20 lg:items-center lg:flex-none">
+      {/* ── DESKTOP layout: side-by-side, fills viewport ── */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 pt-28 pb-16
+                      hidden lg:grid lg:grid-cols-[1fr_auto] lg:gap-12 xl:gap-20 lg:items-center lg:min-h-screen">
 
-        {/* LEFT: text content */}
+        {/* Desktop left: text */}
         <div>
           <AnimatePresence>
             {scanDone && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
-
-                {/* Status pill */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.1 }}
@@ -106,7 +170,6 @@ export default function Hero() {
                   <span className="font-mono text-[11px] text-green tracking-widest">{identity.status}</span>
                 </motion.div>
 
-                {/* Name */}
                 <motion.h1
                   initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -121,7 +184,6 @@ export default function Hero() {
                   </span>
                 </motion.h1>
 
-                {/* Typewriter */}
                 <motion.div
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
                   className="mt-5 font-mono text-lg md:text-xl h-8 flex items-center gap-2"
@@ -131,7 +193,6 @@ export default function Hero() {
                   <span className="inline-block w-[2px] h-5 bg-cyan blink" style={{ boxShadow: "0 0 6px #00e5ff" }} />
                 </motion.div>
 
-                {/* Summary */}
                 <motion.p
                   initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
@@ -140,23 +201,20 @@ export default function Hero() {
                   {identity.summary}
                 </motion.p>
 
-                {/* CTAs */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.75, duration: 0.5 }}
                   className="mt-8 flex flex-wrap gap-4"
                 >
-                  <motion.a
-                    href="#projects" data-cursor="button"
+                  <motion.a href="#projects" data-cursor="button"
                     whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                    className="relative px-6 py-3 font-mono text-sm font-bold text-bg bg-green rounded overflow-hidden group"
+                    className="relative px-6 py-3 font-mono text-sm font-bold text-bg bg-green rounded overflow-hidden"
                     style={{ boxShadow: "0 0 20px rgba(0,255,136,0.25)" }}
                   >
                     <span className="relative z-10">VIEW_WORK()</span>
                     <motion.span className="absolute inset-0 bg-cyan" initial={{ x: "-100%" }} whileHover={{ x: 0 }} transition={{ duration: 0.3 }} />
                   </motion.a>
-                  <motion.a
-                    href="#contact" data-cursor="button"
+                  <motion.a href="#contact" data-cursor="button"
                     whileHover={{ scale: 1.04, borderColor: "#00e5ff" }} whileTap={{ scale: 0.97 }}
                     className="px-6 py-3 font-mono text-sm font-bold text-cyan border border-cyan/40 rounded transition-all"
                     style={{ background: "rgba(0,229,255,0.04)" }}
@@ -165,139 +223,184 @@ export default function Hero() {
                   </motion.a>
                 </motion.div>
 
-                {/* Stats */}
                 <motion.div
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}
                   className="mt-10 flex items-center gap-8"
                 >
-                  {[
-                    { label: "PROJECTS", value: identity.projectsShipped },
-                    { label: "COFFEE",   value: identity.coffeeCount },
-                  ].map((s, i) => (
+                  {STATS.map((s, i) => (
                     <div key={s.label} className="relative">
                       {i > 0 && <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-px h-6 bg-line-bright" />}
-                      <div className="font-sans font-bold text-2xl text-green" style={{ textShadow: "0 0 12px rgba(0,255,136,0.4)" }}>
-                        {s.value}
-                      </div>
+                      <div className="font-sans font-bold text-2xl text-green" style={{ textShadow: "0 0 12px rgba(0,255,136,0.4)" }}>{s.value}</div>
                       <div className="font-mono text-[10px] text-dim mt-0.5 tracking-widest">{s.label}</div>
                     </div>
                   ))}
                 </motion.div>
-
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* RIGHT: profile image + code panel — desktop only */}
-        <div className="hidden lg:flex flex-col items-center gap-8">
+        {/* Desktop right: profile + code panel */}
+        <div className="flex flex-col items-center gap-6">
           <ProfileImage scanDone={scanDone} />
-
           <motion.div
             style={{ x: panelX, y: panelY }}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: scanDone ? 1 : 0, x: scanDone ? 0 : 50 }}
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            data-cursor="card"
-            className="w-full"
+            className="w-full" data-cursor="card"
           >
-            <motion.div
-              whileHover={{ scale: 1.015 }}
-              transition={{ type: "spring", stiffness: 180, damping: 20 }}
-              className="rounded-xl overflow-hidden"
-              style={{
-                background: "rgba(8,12,10,0.92)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(0,255,136,0.12)",
-                boxShadow: "0 0 60px rgba(0,255,136,0.06), 0 0 120px rgba(0,229,255,0.03), inset 0 1px 0 rgba(255,255,255,0.04)",
-              }}
-            >
-              <div className="flex items-center gap-2 px-4 py-3 border-b"
-                style={{ borderColor: "rgba(0,255,136,0.1)", background: "rgba(0,0,0,0.3)" }}>
-                <span className="w-2.5 h-2.5 rounded-full bg-red/50" />
-                <span className="w-2.5 h-2.5 rounded-full bg-amber/50" />
-                <span className="w-2.5 h-2.5 rounded-full bg-green/50" />
-                <span className="ml-3 font-mono text-[11px] text-dim">~/developer.ts</span>
-                <span className="ml-auto font-mono text-[10px] text-green-dim">● LIVE</span>
-              </div>
-
-              <div className="p-6 font-mono text-sm leading-relaxed">
-                {CODE_LINES.map((line, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: scanDone ? 1 : 0, x: scanDone ? 0 : -8 }}
-                    transition={{ delay: 0.4 + i * 0.07, duration: 0.3 }}
-                    className="flex gap-4 min-h-[1.5rem]"
-                  >
-                    <span className="select-none text-dim w-5 text-right shrink-0 text-xs pt-0.5">
-                      {line.code ? i + 1 : ""}
-                    </span>
-                    <span style={{ color: line.color || "transparent" }}>
-                      {line.code
-                        .replace(/(import|from|const|export|default)/g, (m) => `\u200B${m}\u200B`)
-                        .split("\u200B")
-                        .map((part, pi) =>
-                          ["import","from","const","export","default"].includes(part)
-                            ? <span key={pi} style={{ color: "#8b5cf6" }}>{part}</span>
-                            : <span key={pi}>{part}</span>
-                        )}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-
-              <div className="px-4 py-2 border-t flex items-center justify-between"
-                style={{ borderColor: "rgba(0,255,136,0.08)", background: "rgba(0,0,0,0.2)" }}>
-                <span className="font-mono text-[10px] text-dim">TypeScript · UTF-8</span>
-                <span className="font-mono text-[10px] text-green-dim flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-                  No errors
-                </span>
-              </div>
-            </motion.div>
-
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                className="absolute font-mono text-[9px] text-green-dim pointer-events-none"
-                initial={{ opacity: 0 }}
-                animate={scanDone ? { opacity: [0, 0.5, 0], y: [0, -30 - i * 15], x: [0, (i - 1) * 20] } : {}}
-                transition={{ delay: 1.5 + i * 0.4, duration: 2, repeat: Infinity, repeatDelay: 3 + i }}
-                style={{ right: -20 + i * 10, top: 60 + i * 40 }}
-              >
-                {["0x4F2A", "PKT_OK", "ACK"][i]}
-              </motion.div>
-            ))}
+            <CodePanel scanDone={scanDone} />
           </motion.div>
         </div>
       </div>
 
-      {/* ── Mobile profile image — below hero text, above About ── */}
-      {scanDone && (
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.6 }}
-          className="lg:hidden w-full flex justify-center px-6 pb-20 pt-2"
-        >
-          <div style={{ transform: "scale(0.82)", transformOrigin: "top center" }}>
-            <ProfileImage scanDone={scanDone} />
-          </div>
-        </motion.div>
-      )}
+      {/* ── MOBILE layout ── */}
+      <div className="lg:hidden relative z-10 w-full max-w-2xl mx-auto px-5 pt-24 pb-10">
+        <AnimatePresence>
+          {scanDone && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
 
-      {/* Scroll indicator */}
+              {/* Status pill */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-4"
+                style={{ borderColor: "rgba(0,255,136,0.3)", background: "rgba(0,255,136,0.05)" }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" style={{ boxShadow: "0 0 6px #00ff88" }} />
+                <span className="font-mono text-[10px] text-green tracking-widest">{identity.status}</span>
+              </motion.div>
+
+              {/* Name */}
+              <motion.h1
+                initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.6, delay: 0.15, ease }}
+                className="font-sans font-bold leading-[0.9] tracking-tight"
+                style={{ fontSize: "clamp(2.6rem, 12vw, 4rem)" }}
+              >
+                <span className="block text-muted font-mono text-sm mb-1.5 font-normal">// IDENTITY</span>
+                <span className="text-text">I&apos;m </span>
+                <span className="text-green" style={{ textShadow: "0 0 24px rgba(0,255,136,0.4)" }}>{identity.name}</span>
+              </motion.h1>
+
+              {/* Typewriter */}
+              <motion.div
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+                className="mt-3 font-mono text-base h-7 flex items-center gap-2"
+              >
+                <span className="text-dim">&gt;_</span>
+                <span className="text-cyan" style={{ textShadow: "0 0 10px rgba(0,229,255,0.5)" }}>{displayed}</span>
+                <span className="inline-block w-[2px] h-4 bg-cyan blink" style={{ boxShadow: "0 0 5px #00e5ff" }} />
+              </motion.div>
+
+              {/* Summary */}
+              <motion.p
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+                className="mt-4 text-muted leading-relaxed text-sm"
+              >
+                {identity.summary}
+              </motion.p>
+
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.4 }}
+                className="mt-5 flex flex-wrap gap-3"
+              >
+                <motion.a href="#projects" data-cursor="button"
+                  whileTap={{ scale: 0.97 }}
+                  className="relative px-5 py-2.5 font-mono text-sm font-bold text-bg bg-green rounded overflow-hidden"
+                  style={{ boxShadow: "0 0 16px rgba(0,255,136,0.25)" }}
+                >
+                  <span className="relative z-10">VIEW_WORK()</span>
+                </motion.a>
+                <motion.a href="#contact" data-cursor="button"
+                  whileTap={{ scale: 0.97 }}
+                  className="px-5 py-2.5 font-mono text-sm font-bold text-cyan border border-cyan/40 rounded"
+                  style={{ background: "rgba(0,229,255,0.04)" }}
+                >
+                  CONTACT_ME()
+                </motion.a>
+              </motion.div>
+
+              {/* Stats row */}
+              <motion.div
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.75 }}
+                className="mt-5 flex items-center gap-6"
+              >
+                {STATS.map((s, i) => (
+                  <div key={s.label} className="relative">
+                    {i > 0 && <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-px h-5 bg-line-bright" />}
+                    <div className="font-sans font-bold text-xl text-green" style={{ textShadow: "0 0 10px rgba(0,255,136,0.4)" }}>{s.value}</div>
+                    <div className="font-mono text-[9px] text-dim tracking-widest">{s.label}</div>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* ── Shared cyber panel: profile + terminal ── */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9, duration: 0.5 }}
+                className="mt-8 rounded-2xl overflow-hidden"
+                style={{
+                  background: "rgba(8,12,10,0.88)",
+                  backdropFilter: "blur(24px)",
+                  border: "1px solid rgba(0,255,136,0.14)",
+                  boxShadow: "0 16px 48px rgba(0,0,0,0.6), 0 0 40px rgba(0,255,136,0.05), inset 0 1px 0 rgba(255,255,255,0.05)",
+                }}
+              >
+                {/* Panel header */}
+                <div className="flex items-center justify-between px-4 py-2.5 border-b"
+                  style={{ borderColor: "rgba(0,255,136,0.1)", background: "rgba(0,0,0,0.35)" }}>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-red/50" />
+                    <span className="w-2 h-2 rounded-full bg-amber/50" />
+                    <span className="w-2 h-2 rounded-full bg-green/50" />
+                  </div>
+                  <span className="font-mono text-[9px] text-dim tracking-widest">CYBER_ID · PROFILE</span>
+                  <motion.span
+                    className="font-mono text-[9px] text-green flex items-center gap-1"
+                    animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.4, repeat: Infinity }}
+                  >
+                    <span className="w-1 h-1 rounded-full bg-green" />LIVE
+                  </motion.span>
+                </div>
+
+                {/* Profile + terminal side by side */}
+                <div className="flex flex-col xs:flex-row sm:flex-row gap-0">
+                  {/* Profile image — left */}
+                  <div className="flex items-center justify-center p-4 sm:p-5 sm:border-r"
+                    style={{ borderColor: "rgba(0,255,136,0.08)" }}>
+                    <div style={{ transform: "scale(0.72)", transformOrigin: "center" }}>
+                      <ProfileImage scanDone={scanDone} />
+                    </div>
+                  </div>
+
+                  {/* Terminal — right */}
+                  <div className="flex-1 p-3 sm:p-4 min-w-0">
+                    <CodePanel scanDone={scanDone} compact />
+                  </div>
+                </div>
+              </motion.div>
+
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Scroll indicator — desktop only */}
       <AnimatePresence>
         {scanDone && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 hidden lg:flex"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 hidden lg:flex"
           >
             <span className="font-mono text-[10px] text-dim tracking-[0.3em]">SCROLL</span>
             <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+              animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
               className="flex flex-col items-center gap-0.5"
             >
               <div className="w-px h-6 bg-gradient-to-b from-green to-transparent" />
