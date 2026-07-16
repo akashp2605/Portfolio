@@ -137,7 +137,7 @@ export type TimelineEntry = {
 
 export const timeline: TimelineEntry[] = [
    {
-    date: "May 2026 - july 2026",
+    date: "May 2026 - July 2026",
     title: "Java Full Stack Intern",
     org: "VaultShpere AI Technologies",
     type: "work",
@@ -161,15 +161,17 @@ export type Award = {
   date: string;
   description: string;
   type: "award" | "cert" | "achievement";
+  certificate?: string;
 };
 
 export const awards: Award[] = [
   {
-    title: "To be Added",
-    issuer: "Coming Soon",
-    date: "#",
-    description: "To be added",
-    type: "award",
+    title: "Quantum Computing Certification",
+    issuer: "Amaravati Quantum Valley(AQV), Wiser, Qubitech",
+    date: "04-02-2026",
+    description: "Successfully completed 4-week Quantum Computing Fundamentals program, covering quantum algorithms, and practical applications.",
+    type: "cert",
+    certificate: "/certificates/quantum-computing.pdf",
   },
 ];
 
@@ -177,5 +179,5 @@ export const contact = {
   email: "akashp2605@gmail.com",
   github: "https://github.com/Akash90877",
   linkedin: "https://www.linkedin.com/in/akash-p-77709a331?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-  resumeUrl: "",
+  resumeUrl: "/Resume.pdf",
 };

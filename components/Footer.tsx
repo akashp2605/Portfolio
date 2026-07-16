@@ -10,7 +10,7 @@ export default function Footer() {
       style={{ background: "rgba(6,8,6,0.92)", backdropFilter: "blur(24px)" }}>
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="font-mono text-xs text-dim">
-          <span className="text-green">&gt;_</span> PORTFOLIO.EXE — Built with Next.js &amp; Framer Motion
+          <span className="text-green">&gt;_</span> PORTFOLIO.EXE — Built with Next.js
         </div>
 
         <div className="flex items-center gap-6">

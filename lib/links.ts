@@ -7,7 +7,8 @@ export function externalLinkProps(href: string) {
     href.startsWith("http://") ||
     href.startsWith("https://") ||
     href.startsWith("mailto:") ||
-    href.startsWith("tel:");
+    href.startsWith("tel:") ||
+    href.endsWith(".pdf");
 
   return isExternal
     ? { target: "_blank", rel: "noopener noreferrer" }

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { awards } from "@/lib/data";
+import { FileText, ExternalLink } from "lucide-react";
 
 const TYPE_STYLE = {
   award:       { color: "#ffb000", label: "AWARD",       bg: "#ffb00011", border: "#ffb00044" },
@@ -69,6 +70,29 @@ export default function Awards() {
               <h3 className="font-sans font-bold text-base text-text">{a.title}</h3>
               <div className="font-mono text-xs mt-1" style={{ color: style.color }}>{a.issuer}</div>
               <p className="text-sm text-muted mt-3 leading-relaxed">{a.description}</p>
+
+              {a.certificate && (
+                <motion.a
+                  href={a.certificate}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View certificate for ${a.title}`}
+                  whileHover={{ y: -3, scale: 1.03, boxShadow: `0 0 20px ${style.color}33, 0 8px 32px rgba(0,0,0,0.5)` }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs transition-all focus-visible:outline focus-visible:outline-2"
+                  style={{
+                    background: `${style.color}0d`,
+                    border: `1px solid ${style.color}33`,
+                    color: style.color,
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
+                  <FileText size={13} />
+                  View Certificate
+                  <ExternalLink size={11} className="opacity-70" />
+                </motion.a>
+              )}
             </motion.div>
           );
         })}
