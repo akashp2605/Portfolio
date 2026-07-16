@@ -14,11 +14,30 @@ const SOCIAL = [
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [focused, setFocused] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to send");
+      }
+      setSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -160,13 +179,17 @@ export default function Contact() {
                       }}
                     />
                   </div>
+                  {error && (
+                    <p className="font-mono text-xs text-red-400 text-center">{error}</p>
+                  )}
                   <motion.button
                     type="submit"
-                    whileHover={{ scale: 1.02, boxShadow: "0 0 28px rgba(0,255,136,0.45), 0 0 60px rgba(0,255,136,0.15)" }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 font-mono text-sm font-bold text-bg bg-green rounded transition-all"
+                    disabled={loading}
+                    whileHover={!loading ? { scale: 1.02, boxShadow: "0 0 28px rgba(0,255,136,0.45), 0 0 60px rgba(0,255,136,0.15)" } : {}}
+                    whileTap={!loading ? { scale: 0.98 } : {}}
+                    className="w-full py-3 font-mono text-sm font-bold text-bg bg-green rounded transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    ./send_message.sh
+                    {loading ? "SENDING..." : "./send_message.sh"}
                   </motion.button>
                 </motion.form>
               )}
