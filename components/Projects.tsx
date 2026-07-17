@@ -130,7 +130,7 @@ export default function Projects() {
         viewport={{ once: true }}
         className="font-sans font-bold text-4xl md:text-5xl text-text mb-12"
       >
-        Selected <span className="text-green glow-green">Work</span>
+        Selected <span className="text-green">Work</span>
       </motion.h2>
 
       <div className="grid md:grid-cols-2 gap-6" style={{ perspective: "1000px" }}>

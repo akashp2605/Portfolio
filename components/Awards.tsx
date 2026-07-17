@@ -1,16 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { awards } from "@/lib/data";
 import { FileText, ExternalLink } from "lucide-react";
 
 const TYPE_STYLE = {
   award:       { color: "#ffb000", label: "AWARD",       bg: "#ffb00011", border: "#ffb00044" },
   cert:        { color: "#00e5ff", label: "CERTIFICATE",  bg: "#00e5ff11", border: "#00e5ff44" },
-  achievement: { color: "#8b5cf6", label: "ACHIEVEMENT",  bg: "#8b5cf611", border: "#8b5cf644" },
+  honor:       { color: "#8b5cf6", label: "HONOR",        bg: "#8b5cf611", border: "#8b5cf644" },
 };
 
 export default function Awards() {
+  const [hovered, setHovered] = useState<number | null>(null);
+
   return (
     <section id="awards" className="py-32 px-6 md:px-16 max-w-7xl mx-auto">
       <motion.div
@@ -29,12 +32,12 @@ export default function Awards() {
         viewport={{ once: true }}
         className="font-sans font-bold text-4xl md:text-5xl text-text mb-12"
       >
-        Awards &amp; <span className="text-green" style={{ textShadow: "0 0 10px #07aa33, 0 0 20px #ffb000" }}>Certs</span>
+        Awards, <span className="text-green">Certs &amp; Honors</span>
       </motion.h2>
 
       <div className="grid md:grid-cols-2 gap-5">
         {awards.map((a, i) => {
-          const style = TYPE_STYLE[a.type];
+          const style = TYPE_STYLE[a.type] || TYPE_STYLE.award;
           return (
             <motion.div
               key={i}
@@ -80,6 +83,8 @@ export default function Awards() {
                   whileHover={{ y: -3, scale: 1.03, boxShadow: `0 0 20px ${style.color}33, 0 8px 32px rgba(0,0,0,0.5)` }}
                   whileTap={{ scale: 0.97 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered(null)}
                   className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs transition-all focus-visible:outline focus-visible:outline-2"
                   style={{
                     background: `${style.color}0d`,
@@ -88,9 +93,26 @@ export default function Awards() {
                     backdropFilter: "blur(8px)",
                   }}
                 >
-                  <FileText size={13} />
-                  View Certificate
-                  <ExternalLink size={11} className="opacity-70" />
+                  <span className="relative overflow-hidden" style={{ minWidth: "7.5ch", display: "inline-block" }}>
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.span
+                        key={hovered === i ? "verifying" : "default"}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.15 }}
+                        className="block"
+                      >
+                        {hovered === i ? "Verifying..." : "Cert.verify()"}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
+                  <motion.span
+                    animate={{ x: hovered === i ? 2 : 0, opacity: hovered === i ? 1 : 0.7 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <ExternalLink size={11} />
+                  </motion.span>
                 </motion.a>
               )}
             </motion.div>

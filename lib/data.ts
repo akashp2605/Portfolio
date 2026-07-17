@@ -1,3 +1,4 @@
+import { title } from "process";
 
 export const identity = {
   name: "Akash",
@@ -160,11 +161,27 @@ export type Award = {
   issuer: string;
   date: string;
   description: string;
-  type: "award" | "cert" | "achievement";
+  type: "award" | "cert" | "honor";
   certificate?: string;
 };
 
 export const awards: Award[] = [
+  {
+    title: "Technical Quiz Host",
+    issuer: "Kuppam Engineering College, Coding Club",
+    date: "01-08-2025",
+    description: "Hosted and organized a technical quiz competition for college students, focusing on programming, algorithms, and computer science concepts.",
+    type: "honor",
+    certificate: "/certificates/Coding-Club.pdf",
+  },
+  {
+    title: "National Level Hackathon Participant",
+    issuer: "Sri Manakula Vinayagar Engineering College",
+    date: "19-09-2025-20-09-2025",
+    description: "Participated in a national-level 24-hour hackathon, successfully advancing to Stage 3 of 5 by demonstrating strong problem-solving, teamwork, and software development skills.",
+    type: "cert",
+    certificate: "/certificates/Hackathon-Pondi.pdf",
+  },
   {
     title: "Quantum Computing Certification",
     issuer: "Amaravati Quantum Valley(AQV), Wiser, Qubitech",
@@ -173,6 +190,7 @@ export const awards: Award[] = [
     type: "cert",
     certificate: "/certificates/quantum-computing.pdf",
   },
+  
 ];
 
 export const contact = {

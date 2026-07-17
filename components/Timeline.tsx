@@ -22,7 +22,7 @@ export default function Timeline() {
         viewport={{ once: true }}
         className="font-sans font-bold text-4xl md:text-5xl text-text mb-16"
       >
-        My <span className="text-green glow-green">Journey</span>
+        My <span className="text-green">Journey</span>
       </motion.h2>
 
       <div className="relative max-w-3xl">

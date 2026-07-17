@@ -6,8 +6,8 @@ import { contact } from "@/lib/data";
 import { externalLinkProps } from "@/lib/links";
 
 const SOCIAL = [
-  { label: "github.connect()",   href: contact.github,   color: "#00ff88" },
-  { label: "linkedin.open()", href: contact.linkedin,  color: "#00e5ff" },
+  { label: "github.open()",   href: contact.github,   color: "#00ff88" },
+  { label: "linkedin.connect()", href: contact.linkedin,  color: "#00e5ff" },
   { label: "resume.view()",   href: contact.resumeUrl, color: "#f0f0f0" },
 ];
 
@@ -57,7 +57,7 @@ export default function Contact() {
         viewport={{ once: true }}
         className="font-sans font-bold text-4xl md:text-5xl text-text mb-4"
       >
-        Open <span className="text-green glow-green">Secure Channel</span>
+        Open <span className="text-green">Secure Channel</span>
       </motion.h2>
       <motion.p
         initial={{ opacity: 0 }}

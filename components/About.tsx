@@ -36,7 +36,7 @@ export default function About() {
             className="font-sans font-bold text-4xl md:text-5xl text-text mb-8 leading-tight"
           >
             About the{" "}
-            <span className="text-green glow-green">Developer</span>
+            <span className="text-green">Developer</span>
           </motion.h2>
 
           {about.paragraphs.map((p, i) => (

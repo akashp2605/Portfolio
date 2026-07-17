@@ -118,7 +118,7 @@ export default function Skills() {
         viewport={{ once: true }}
         className="font-sans font-bold text-4xl md:text-5xl text-text mb-14"
       >
-        Tech <span className="text-cyan glow-cyan">Stack</span>
+        Tech <span className="text-green">Stack</span>
       </motion.h2>
 
       <div className="grid md:grid-cols-2 gap-6">
