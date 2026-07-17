@@ -1,16 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { awards } from "@/lib/data";
-import { FileText, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 const TYPE_STYLE = {
-  award:       { color: "#ffb000", label: "AWARD",       bg: "#ffb00011", border: "#ffb00044" },
-  cert:        { color: "#00e5ff", label: "CERTIFICATE",  bg: "#00e5ff11", border: "#00e5ff44" },
-  honor:       { color: "#8b5cf6", label: "HONOR",        bg: "#8b5cf611", border: "#8b5cf644" },
+  award: { color: "#ffb000", label: "AWARD",       bg: "#ffb00011", border: "#ffb00044" },
+  cert:  { color: "#00e5ff", label: "CERTIFICATE",  bg: "#00e5ff11", border: "#00e5ff44" },
+  honor: { color: "#8b5cf6", label: "HONOR",        bg: "#8b5cf611", border: "#8b5cf644" },
 };
 
 export default function Awards() {
+  const [hovered, setHovered] = useState<number | null>(null);
+
   return (
     <section id="awards" className="py-32 px-6 md:px-16 max-w-7xl mx-auto">
       <motion.div
@@ -29,7 +32,7 @@ export default function Awards() {
         viewport={{ once: true }}
         className="font-sans font-bold text-4xl md:text-5xl text-text mb-12"
       >
-       Certs <span className="text-green"> &amp; Honors</span>
+        Certs <span className="text-green">&amp; Honors</span>
       </motion.h2>
 
       <div className="grid md:grid-cols-2 gap-5">
@@ -51,7 +54,6 @@ export default function Awards() {
                 boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
               }}
             >
-              {/* Glow corner */}
               <div
                 className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none"
                 style={{ background: `radial-gradient(circle, ${style.color}11 0%, transparent 70%)` }}
@@ -77,10 +79,12 @@ export default function Awards() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`View certificate for ${a.title}`}
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered(null)}
                   whileHover={{ y: -3, scale: 1.03, boxShadow: `0 0 20px ${style.color}33, 0 8px 32px rgba(0,0,0,0.5)` }}
                   whileTap={{ scale: 0.97 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs transition-all focus-visible:outline focus-visible:outline-2"
+                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs focus-visible:outline focus-visible:outline-2"
                   style={{
                     background: `${style.color}0d`,
                     border: `1px solid ${style.color}33`,
@@ -88,8 +92,26 @@ export default function Awards() {
                     backdropFilter: "blur(8px)",
                   }}
                 >
-                  Cert.verify()
-                  <ExternalLink size={11} className="opacity-70" />
+                  <span className="inline-block" style={{ minWidth: "7.5ch" }}>
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.span
+                        key={hovered === i ? "v" : "d"}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.12 }}
+                        className="block"
+                      >
+                        {hovered === i ? "Verifying..." : "Cert.verify()"}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
+                  <motion.span
+                    animate={{ x: hovered === i ? 2 : 0, opacity: hovered === i ? 1 : 0.7 }}
+                    transition={{ duration: 0.14 }}
+                  >
+                    <ExternalLink size={11} />
+                  </motion.span>
                 </motion.a>
               )}
             </motion.div>
