@@ -161,7 +161,7 @@ export type Award = {
   issuer: string;
   date: string;
   description: string;
-  type: "award" | "cert" | "honor";
+  type:"cert" | "honor";
   certificate?: string;
 };
 
