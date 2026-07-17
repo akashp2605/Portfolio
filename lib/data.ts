@@ -167,17 +167,25 @@ export type Award = {
 
 export const awards: Award[] = [
   {
-    title: "Technical Quiz Host",
+    title: "Coding Club Host",
     issuer: "Kuppam Engineering College, Coding Club",
-    date: "01-08-2025",
-    description: "Hosted and organized a technical quiz competition for college students, focusing on programming, algorithms, and computer science concepts.",
+    date: "Aug 2025",
+    description: "Hosted and coordinated technical competitions for college students, fostering problem-solving, programming, and collaborative learning.",
     type: "honor",
-    certificate: "/certificates/Coding-Club.pdf",
+    certificate: "/certificates/Coding Club.pdf",
+    },
+    {
+    title: "Technical Quiz Host",
+    issuer: "Department of Computer Science(AI&ML), Kuppam Engineering College",
+    date: "Aug 2025",
+    description: "Hosted and coordinated the online Technical Quiz competition during the national-level symposium AITHERONML using a custom-built quiz platform developed by me and team.",
+    type: "honor",
+    certificate: "/certificates/AITHERONML.pdf",
   },
   {
     title: "National Level Hackathon Participant",
-    issuer: "Sri Manakula Vinayagar Engineering College",
-    date: "19-09-2025-20-09-2025",
+    issuer: "24-hour Hackathon, Sri Manakula Vinayagar Engineering College",
+    date: "Sep 2025",
     description: "Participated in a national-level 24-hour hackathon, successfully advancing to Stage 3 of 5 by demonstrating strong problem-solving, teamwork, and software development skills.",
     type: "cert",
     certificate: "/certificates/Hackathon-Pondi.pdf",
@@ -185,7 +193,7 @@ export const awards: Award[] = [
   {
     title: "Quantum Computing Certification",
     issuer: "Amaravati Quantum Valley(AQV), Wiser, Qubitech",
-    date: "04-02-2026",
+    date: "Feb 2026",
     description: "Successfully completed 4-week Quantum Computing Fundamentals program, covering quantum algorithms, and practical applications.",
     type: "cert",
     certificate: "/certificates/quantum-computing.pdf",
