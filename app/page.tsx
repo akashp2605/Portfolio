@@ -15,6 +15,7 @@ import Timeline from "@/components/Timeline";
 import Awards from "@/components/Awards";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import ProfileCard from "@/components/ProfileCard";
 
 export default function Home() {
   const [booted, setBooted] = useState(false);
@@ -36,6 +37,7 @@ export default function Home() {
             <StatusBar />
             <main className="relative z-10 pb-7">
               <Hero />
+              <ProfileCard />
               <About />
               <Projects />
               <Skills />

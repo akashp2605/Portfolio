@@ -161,13 +161,13 @@ export type Award = {
   issuer: string;
   date: string;
   description: string;
-  type:"cert" | "honor";
+  type:"cert" | "honor" | "hackathon";
   certificate?: string;
 };
 
 export const awards: Award[] = [
   {
-    title: "Coding Club Host",
+    title: "Coding Club Lead",
     issuer: "Kuppam Engineering College, Coding Club",
     date: "Aug 2025",
     description: "Hosted and coordinated technical competitions for college students, fostering problem-solving, programming, and collaborative learning.",
@@ -203,7 +203,7 @@ export const awards: Award[] = [
 
 export const contact = {
   email: "akashp2605@gmail.com",
-  github: "https://github.com/Akash90877",
-  linkedin: "https://www.linkedin.com/in/akash-p-77709a331?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+  github: "https://github.com/akashp2605",
+  linkedin: "https://www.linkedin.com/in/akash-p-77709a331",
   resumeUrl: "/Resume.pdf",
 };

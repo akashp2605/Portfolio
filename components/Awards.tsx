@@ -3,16 +3,38 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { awards } from "@/lib/data";
-import { ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import BorderGlow from "@/components/BorderGlow";
 
 const TYPE_STYLE = {
-  cert: { color: "#00e5ff", label: "Certificate", icon: "📜" },
-  honor: { color: "#8b5cf6", label: "Honor", icon: "🏆" },
+  cert: { 
+    color: "#2DD4BF", 
+    label: "Certificate",
+    border: "rgba(45,212,191,0.25)",
+    glow: "rgba(45,212,191,0.18)",
+    badgeBg: "rgba(45,212,191,0.12)",
+  },
+  honor: { 
+    color: "#7C6CF3", 
+    label: "Leadership",
+    border: "rgba(124,108,243,0.25)",
+    glow: "rgba(124,108,243,0.18)",
+    badgeBg: "rgba(124,108,243,0.12)",
+  },
+  hackathon: { 
+    color: "#00C97A", 
+    label: "Hackathon",
+    border: "rgba(0,201,122,0.25)",
+    glow: "rgba(0,201,122,0.18)",
+    badgeBg: "rgba(0,201,122,0.12)",
+  },
 };
 
 function CredentialCard({ award, index }: { award: typeof awards[0]; index: number }) {
   const [hovered, setHovered] = useState(false);
+  const [buttonHovered, setButtonHovered] = useState(false);
   const style = TYPE_STYLE[award.type] || TYPE_STYLE.cert;
+  const year = award.date.split("-")[2] || "2025";
 
   return (
     <motion.div
@@ -24,99 +46,115 @@ function CredentialCard({ award, index }: { award: typeof awards[0]; index: numb
       onHoverEnd={() => setHovered(false)}
       className="group relative"
     >
-      {/* Glass card */}
-      <motion.div
-        className="relative overflow-hidden rounded-xl p-6 md:p-8"
-        style={{
-          background: "rgba(12, 15, 12, 0.6)",
-          backdropFilter: "blur(20px)",
-          border: `1px solid ${style.color}15`,
-          boxShadow: hovered
-            ? `0 0 30px ${style.color}12, 0 8px 32px rgba(0,0,0,0.4)`
-            : "0 4px 24px rgba(0,0,0,0.3)",
-        }}
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-      >
-        {/* Large translucent icon */}
+      <BorderGlow color={style.color}>
+        {/* Glass card */}
         <motion.div
-          className="absolute top-4 right-4 text-6xl opacity-[0.08] pointer-events-none select-none"
-          animate={{
-            scale: hovered ? 1.1 : 1,
-            opacity: hovered ? 0.12 : 0.08,
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          {style.icon}
-        </motion.div>
-
-        {/* Title */}
-        <motion.h3
-          className="font-sans font-bold text-xl md:text-2xl text-text mb-2"
-          animate={{
-            color: hovered ? style.color : "#f5f5f5",
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          {award.title}
-        </motion.h3>
-
-        {/* Issuer */}
-        <div className="font-mono text-sm mb-4" style={{ color: style.color }}>
-          {award.issuer}
-        </div>
-
-        {/* Description */}
-        <p className="text-sm text-muted leading-relaxed mb-6">
-          {award.description}
-        </p>
-
-        {/* Footer */}
-        <div className="flex items-center gap-3 mb-6 font-mono text-xs text-dim">
-          <span style={{ color: style.color }}>{style.label}</span>
-          <span>•</span>
-          <span>{award.date}</span>
-          <span>•</span>
-          <span className="text-green">Verified</span>
-        </div>
-
-        {/* Certificate button */}
-        {award.certificate && (
-          <motion.a
-            href={award.certificate}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`View certificate for ${award.title}`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-mono text-sm"
-            style={{
-              background: hovered ? `${style.color}15` : `${style.color}08`,
-              border: `1px solid ${style.color}25`,
-              color: style.color,
-            }}
-          >
-            <span>View Certificate</span>
-            <motion.span
-              animate={{ x: hovered ? 4 : 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ExternalLink size={14} />
-            </motion.span>
-          </motion.a>
-        )}
-
-        {/* Subtle border glow on hover */}
-        <motion.div
-          className="absolute inset-0 rounded-xl pointer-events-none"
+          className="relative overflow-hidden rounded-[28px] p-8"
           style={{
-            border: `1px solid ${style.color}`,
-            opacity: 0,
+            background: hovered ? "rgba(15,18,22,0.9)" : "rgba(15,18,22,0.82)",
+            backdropFilter: "blur(12px)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            boxShadow: hovered 
+              ? `0 0 40px ${style.glow}, 0 12px 40px rgba(0,0,0,0.5)` 
+              : "0 4px 24px rgba(0,0,0,0.3)",
           }}
-          animate={{ opacity: hovered ? 0.2 : 0 }}
-          transition={{ duration: 0.3 }}
-        />
-      </motion.div>
+          whileHover={{ y: -4 }}
+          transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          {/* Left accent border */}
+          <div 
+            className="absolute left-0 top-0 bottom-0 w-1 rounded-l-[28px]"
+            style={{ background: style.color }}
+          />
+
+          {/* Top row: Category badge and date */}
+          <div className="flex items-center justify-between mb-8">
+            <span
+              className="font-mono text-[10px] px-3 py-1.5 rounded-full uppercase tracking-wider"
+              style={{
+                color: style.color,
+                background: style.badgeBg,
+                border: `1px solid ${style.border}`,
+              }}
+            >
+              {style.label}
+            </span>
+            <span className="font-mono text-xs text-dim">{award.date}</span>
+          </div>
+
+          {/* Title */}
+          <motion.h3
+            className="font-sans font-bold text-2xl md:text-3xl text-white mb-3"
+            animate={{
+              textShadow: hovered ? `0 0 20px ${style.color}30` : "none",
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            {award.title}
+          </motion.h3>
+
+          {/* Issuer */}
+          <div className="font-mono text-sm mb-6" style={{ color: style.color }}>
+            {award.issuer}
+          </div>
+
+          {/* Description */}
+          <p className="text-sm text-muted leading-relaxed mb-8">
+            {award.description}
+          </p>
+
+          {/* Footer */}
+          <div className="flex items-center gap-3 mb-8 font-mono text-[10px] uppercase tracking-wider text-dim">
+            <span style={{ color: style.color }}>{style.label}</span>
+            <span>•</span>
+            <span className="text-green">Verified</span>
+            <span>•</span>
+            <span>{year}</span>
+          </div>
+
+          {/* Verify button */}
+          {award.certificate && (
+            <motion.a
+              href={award.certificate}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`View certificate for ${award.title}`}
+              onMouseEnter={() => setButtonHovered(true)}
+              onMouseLeave={() => setButtonHovered(false)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-mono text-sm"
+              style={{
+                background: hovered ? style.badgeBg : `${style.color}06`,
+                border: `1px solid ${style.border}`,
+                color: style.color,
+                boxShadow: hovered ? `0 0 20px ${style.glow}` : "none",
+              }}
+            >
+              <span className="inline-block" style={{ minWidth: "10ch" }}>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={buttonHovered ? "opening" : "verify"}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.1 }}
+                    className="block"
+                  >
+                    {buttonHovered ? "Opening..." : "Verify Credential"}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+              <motion.span
+                animate={{ x: buttonHovered ? 4 : 0, opacity: buttonHovered ? 1 : 0.6 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ArrowUpRight size={16} />
+              </motion.span>
+            </motion.a>
+          )}
+        </motion.div>
+      </BorderGlow>
     </motion.div>
   );
 }
@@ -142,11 +180,11 @@ export default function Awards() {
         viewport={{ once: true }}
         className="font-sans font-bold text-4xl md:text-5xl text-text mb-16"
       >
-        <span className="text-green">Achievement Database</span>
+        <span className="text-green">Credential Vault</span>
       </motion.h2>
 
       {/* Grid layout */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-8">
         {awards.map((award, i) => (
           <CredentialCard key={i} award={award} index={i} />
         ))}
