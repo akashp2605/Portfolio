@@ -191,7 +191,7 @@ export const awards: Award[] = [
     certificate: "/certificates/Hackathon-Pondi.pdf",
   },
   {
-    title: "Quantum Computing Certification",
+    title: "Quantum Computing",
     issuer: "Amaravati Quantum Valley(AQV), Wiser, Qubitech",
     date: "Feb 2026",
     description: "Successfully completed 4-week Quantum Computing Fundamentals program, covering quantum algorithms, and practical applications.",
