@@ -114,3 +114,44 @@
   align-items: center;
   justify-content: space-between;
 }
+
+/* Background Moving Scanlines & Beam (Requirement 8) */
+.scanlines-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 255, 136, 0.015) 51%
+  );
+  background-size: 100% 4px;
+  opacity: 0.6;
+}
+
+.scanline-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 25%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 255, 136, 0.03),
+    transparent
+  );
+  pointer-events: none;
+  z-index: 2;
+  animation: scanlineBeam 18s linear infinite;
+}
+
+@keyframes scanlineBeam {
+  0% {
+    top: -25%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+

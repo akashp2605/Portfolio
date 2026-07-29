@@ -1,15 +1,24 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion, useMotionValue, useTransform, useSpring, useInView, useReducedMotion } from "framer-motion";
 import { identity, contact } from "@/lib/data";
 import { Mail, MapPin, FileText, Download, ArrowRight, ExternalLink } from "lucide-react";
 import "./ProfileCard.css";
 
 export default function ProfileCard() {
+  const sectionRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const isInView = useInView(sectionRef, { once: true, amount: 0.25 });
+  const shouldReduceMotion = useReducedMotion();
+
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+
+  // Data packet transmission state
+  const [packetTarget, setPacketTarget] = useState<{ x: string; y: string } | null>(null);
+  const [isPacketActive, setIsPacketActive] = useState(false);
 
   // Center Hub initials
   const initials = "AK";
@@ -29,6 +38,12 @@ export default function ProfileCard() {
     stiffness: 250,
     damping: 25,
   });
+
+  // Subtle cursor tracking for center node and connection endpoints (2-3px max)
+  const centerMoveX = useTransform(mouseX, [-0.5, 0.5], [-3, 3]);
+  const centerMoveY = useTransform(mouseY, [-0.5, 0.5], [-3, 3]);
+  const smoothCenterX = useSpring(centerMoveX, { stiffness: 200, damping: 20 });
+  const smoothCenterY = useSpring(centerMoveY, { stiffness: 200, damping: 20 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -53,16 +68,58 @@ export default function ProfileCard() {
     setIsHovered(true);
   };
 
+  // Data packet periodic transmission effect (every 3.5 to 4.5 seconds)
+  useEffect(() => {
+    if (!isInView || shouldReduceMotion) return;
+
+    const nodesList = [
+      { id: "github", x: "22%", y: "20%" },
+      { id: "linkedin", x: "78%", y: "20%" },
+      { id: "email", x: "22%", y: "80%" },
+      { id: "location", x: "50%", y: "12%" },
+      { id: "leetcode", x: "78%", y: "80%" },
+    ];
+
+    let timer: NodeJS.Timeout;
+    const triggerPacket = () => {
+      const randomNode = nodesList[Math.floor(Math.random() * nodesList.length)];
+      setPacketTarget({ x: randomNode.x, y: randomNode.y });
+      setIsPacketActive(true);
+
+      timer = setTimeout(() => {
+        setIsPacketActive(false);
+      }, 900);
+    };
+
+    // Initial packet pulse after reveal sequence completes (~2.2s)
+    const initialTimer = setTimeout(triggerPacket, 2200);
+
+    const interval = setInterval(triggerPacket, 4000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
+  }, [isInView, shouldReduceMotion]);
+
+  // Helpers for node hover dimming state
+  const isNodeDimmed = (key: string) => hoveredNode !== null && hoveredNode !== key;
+  const isLineDimmed = (key: string) => hoveredNode !== null && hoveredNode !== key;
+
   return (
-    <section className="relative flex items-center justify-center py-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
+    <section ref={sectionRef} className="relative flex items-center justify-center py-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onMouseEnter={handleMouseEnter}
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.4 }}
         style={{
-          rotateX,
-          rotateY,
+          rotateX: shouldReduceMotion ? 0 : rotateX,
+          rotateY: shouldReduceMotion ? 0 : rotateY,
           transformStyle: "preserve-3d",
           perspective: 1200,
         }}
@@ -70,9 +127,13 @@ export default function ProfileCard() {
       >
         {/* Main Terminal Panel */}
         <div className="profile-card-container relative p-6 sm:p-8 lg:p-10">
+          {/* Subtle Background Scanlines & Moving Light Beam */}
+          <div className="scanlines-bg" />
+          <div className="scanline-beam" />
+
           {/* Cursor Glow Effect */}
           <motion.div
-            className="absolute pointer-events-none rounded-full"
+            className="absolute pointer-events-none rounded-full z-10"
             style={{
               width: 500,
               height: 500,
@@ -95,18 +156,26 @@ export default function ProfileCard() {
                 "linear-gradient(to bottom, transparent, rgba(0, 255, 136, 0.025), transparent)",
               height: "40%",
             }}
-            animate={{ y: ["-100%", "300%"] }}
+            animate={shouldReduceMotion ? {} : { y: ["-100%", "300%"] }}
             transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
           />
 
           {/* Two-Column Layout Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch relative z-10">
             {/* ════════════════════════════════════════════════════════════ */}
             {/* LEFT PANEL (~60% width on desktop)                           */}
             {/* ════════════════════════════════════════════════════════════ */}
             <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
-              {/* TOP HEADER */}
-              <div>
+              {/* TOP HEADER - Step 2 Reveal */}
+              <motion.div
+                initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+                animate={
+                  isInView
+                    ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                    : { opacity: 0, y: 20, filter: "blur(8px)" }
+                }
+                transition={{ duration: 0.45, delay: shouldReduceMotion ? 0 : 0.15 }}
+              >
                 <div className="font-mono text-xs font-semibold tracking-widest text-[#00ff88] uppercase mb-1.5 flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" />
                   SYSTEM IDENTITY NODE
@@ -117,11 +186,44 @@ export default function ProfileCard() {
                 <p className="font-mono text-xs text-[#8f9a91] tracking-wide leading-relaxed">
                   Secure Communication • Identity Verified • Portfolio Access
                 </p>
-              </div>
+              </motion.div>
 
               {/* CENTER NETWORK MATRIX DIAGRAM */}
-              <div className="network-matrix relative my-4 sm:my-6 p-6 min-h-[360px] sm:min-h-[400px]">
-                {/* SVG Glowing Connection Lines */}
+              <div className="network-matrix relative my-4 sm:my-6 p-6 min-h-[360px] sm:min-h-[400px] overflow-hidden">
+                {/* Ambient Particles */}
+                {[
+                  { top: "15%", left: "20%", delay: 0, duration: 7 },
+                  { top: "75%", left: "15%", delay: 1.5, duration: 9 },
+                  { top: "25%", left: "80%", delay: 3, duration: 8 },
+                  { top: "80%", left: "75%", delay: 0.5, duration: 10 },
+                  { top: "45%", left: "10%", delay: 2, duration: 6 },
+                  { top: "50%", left: "88%", delay: 4, duration: 8.5 },
+                  { top: "10%", left: "45%", delay: 1, duration: 7.5 },
+                  { top: "85%", left: "48%", delay: 3.5, duration: 9 },
+                ].map((p, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 rounded-full bg-[#00ff88] pointer-events-none z-0"
+                    style={{ top: p.top, left: p.left, opacity: 0.12 }}
+                    animate={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            y: [0, -12, 0],
+                            x: [0, 6, 0],
+                            opacity: [0.05, 0.18, 0.05],
+                          }
+                    }
+                    transition={{
+                      duration: p.duration,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: p.delay,
+                    }}
+                  />
+                ))}
+
+                {/* SVG Glowing Connection Lines & Cables */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
                   <defs>
                     <linearGradient id="cyan-green-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -132,62 +234,174 @@ export default function ProfileCard() {
                       <feGaussianBlur stdDeviation="3" result="blur" />
                       <feComposite in="SourceGraphic" in2="blur" operator="over" />
                     </filter>
+
+                    {/* SVG Masks for Sequential Cable Line Drawing */}
+                    <mask id="mask-github" maskUnits="userSpaceOnUse">
+                      <motion.line
+                        x1="50%" y1="50%" x2="22%" y2="20%"
+                        stroke="white" strokeWidth="12"
+                        initial={{ pathLength: 0 }}
+                        animate={isInView ? { pathLength: 1 } : { pathLength: 0 }}
+                        transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0.60, ease: "easeInOut" }}
+                      />
+                    </mask>
+                    <mask id="mask-linkedin" maskUnits="userSpaceOnUse">
+                      <motion.line
+                        x1="50%" y1="50%" x2="78%" y2="20%"
+                        stroke="white" strokeWidth="12"
+                        initial={{ pathLength: 0 }}
+                        animate={isInView ? { pathLength: 1 } : { pathLength: 0 }}
+                        transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0.72, ease: "easeInOut" }}
+                      />
+                    </mask>
+                    <mask id="mask-email" maskUnits="userSpaceOnUse">
+                      <motion.line
+                        x1="50%" y1="50%" x2="22%" y2="80%"
+                        stroke="white" strokeWidth="12"
+                        initial={{ pathLength: 0 }}
+                        animate={isInView ? { pathLength: 1 } : { pathLength: 0 }}
+                        transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0.84, ease: "easeInOut" }}
+                      />
+                    </mask>
+                    <mask id="mask-location" maskUnits="userSpaceOnUse">
+                      <motion.line
+                        x1="50%" y1="50%" x2="50%" y2="12%"
+                        stroke="white" strokeWidth="12"
+                        initial={{ pathLength: 0 }}
+                        animate={isInView ? { pathLength: 1 } : { pathLength: 0 }}
+                        transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 0.96, ease: "easeInOut" }}
+                      />
+                    </mask>
+                    <mask id="mask-leetcode" maskUnits="userSpaceOnUse">
+                      <motion.line
+                        x1="50%" y1="50%" x2="78%" y2="80%"
+                        stroke="white" strokeWidth="12"
+                        initial={{ pathLength: 0 }}
+                        animate={isInView ? { pathLength: 1 } : { pathLength: 0 }}
+                        transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : 1.08, ease: "easeInOut" }}
+                      />
+                    </mask>
                   </defs>
 
                   {/* Line 1: Center to GitHub (Top-Left) */}
                   <motion.line
                     x1="50%" y1="50%"
                     x2="22%" y2="20%"
+                    mask="url(#mask-github)"
                     stroke={hoveredNode === "github" ? "#00ff88" : "rgba(0, 255, 136, 0.25)"}
-                    strokeWidth={hoveredNode === "github" ? "2" : "1.2"}
+                    strokeWidth={hoveredNode === "github" ? "2.2" : "1.2"}
                     className="network-line"
                     filter="url(#glow)"
+                    animate={{ opacity: isLineDimmed("github") ? 0.2 : 1 }}
+                    transition={{ duration: 0.2 }}
                   />
+
                   {/* Line 2: Center to LinkedIn (Top-Right) */}
                   <motion.line
                     x1="50%" y1="50%"
                     x2="78%" y2="20%"
+                    mask="url(#mask-linkedin)"
                     stroke={hoveredNode === "linkedin" ? "#00ff88" : "rgba(0, 255, 136, 0.25)"}
-                    strokeWidth={hoveredNode === "linkedin" ? "2" : "1.2"}
+                    strokeWidth={hoveredNode === "linkedin" ? "2.2" : "1.2"}
                     className="network-line"
                     filter="url(#glow)"
+                    animate={{ opacity: isLineDimmed("linkedin") ? 0.2 : 1 }}
+                    transition={{ duration: 0.2 }}
                   />
+
                   {/* Line 3: Center to Email (Bottom-Left) */}
                   <motion.line
                     x1="50%" y1="50%"
                     x2="22%" y2="80%"
+                    mask="url(#mask-email)"
                     stroke={hoveredNode === "email" ? "#00ff88" : "rgba(0, 255, 136, 0.25)"}
-                    strokeWidth={hoveredNode === "email" ? "2" : "1.2"}
+                    strokeWidth={hoveredNode === "email" ? "2.2" : "1.2"}
                     className="network-line"
                     filter="url(#glow)"
+                    animate={{ opacity: isLineDimmed("email") ? 0.2 : 1 }}
+                    transition={{ duration: 0.2 }}
                   />
-                  {/* Line 4: Center to LeetCode (Bottom-Right) */}
-                  <motion.line
-                    x1="50%" y1="50%"
-                    x2="78%" y2="80%"
-                    stroke={hoveredNode === "leetcode" ? "#00ff88" : "rgba(0, 255, 136, 0.25)"}
-                    strokeWidth={hoveredNode === "leetcode" ? "2" : "1.2"}
-                    className="network-line"
-                    filter="url(#glow)"
-                  />
-                  {/* Line 5: Center to Location (Top-Center) */}
+
+                  {/* Line 4: Center to Location (Top-Center) */}
                   <motion.line
                     x1="50%" y1="50%"
                     x2="50%" y2="12%"
+                    mask="url(#mask-location)"
                     stroke={hoveredNode === "location" ? "#00ff88" : "rgba(0, 255, 136, 0.25)"}
-                    strokeWidth={hoveredNode === "location" ? "2" : "1.2"}
+                    strokeWidth={hoveredNode === "location" ? "2.2" : "1.2"}
                     className="network-line"
                     filter="url(#glow)"
+                    animate={{ opacity: isLineDimmed("location") ? 0.2 : 1 }}
+                    transition={{ duration: 0.2 }}
                   />
+
+                  {/* Line 5: Center to LeetCode (Bottom-Right) */}
+                  <motion.line
+                    x1="50%" y1="50%"
+                    x2="78%" y2="80%"
+                    mask="url(#mask-leetcode)"
+                    stroke={hoveredNode === "leetcode" ? "#00ff88" : "rgba(0, 255, 136, 0.25)"}
+                    strokeWidth={hoveredNode === "leetcode" ? "2.2" : "1.2"}
+                    className="network-line"
+                    filter="url(#glow)"
+                    animate={{ opacity: isLineDimmed("leetcode") ? 0.2 : 1 }}
+                    transition={{ duration: 0.2 }}
+                  />
+
+                  {/* Data Packet Travelling Particle */}
+                  {isPacketActive && packetTarget && (
+                    <motion.circle
+                      r="3.5"
+                      fill="#00ff88"
+                      filter="url(#glow)"
+                      initial={{ cx: "50%", cy: "50%", opacity: 0 }}
+                      animate={{
+                        cx: ["50%", packetTarget.x],
+                        cy: ["50%", packetTarget.y],
+                        opacity: [0, 1, 1, 0],
+                      }}
+                      transition={{ duration: 0.85, ease: "easeInOut" }}
+                    />
+                  )}
                 </svg>
 
-                {/* CENTER HUB NODE */}
+                {/* CENTER HUB NODE - Step 3 Reveal & Idle Breathing */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center justify-center">
                   <motion.div
                     className="center-hub w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center cursor-pointer"
-                    whileHover={{ scale: 1.1 }}
-                    animate={{ scale: [1, 1.03, 1] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    style={{
+                      x: shouldReduceMotion ? 0 : smoothCenterX,
+                      y: shouldReduceMotion ? 0 : smoothCenterY,
+                    }}
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={
+                      isInView
+                        ? {
+                            scale: hoveredNode ? 1.08 : shouldReduceMotion ? 1 : [1, 1.03, 1],
+                            opacity: 1,
+                            boxShadow: hoveredNode
+                              ? "0 0 40px rgba(0, 255, 136, 0.6), inset 0 0 20px rgba(0, 255, 136, 0.4)"
+                              : [
+                                  "0 0 25px rgba(0, 255, 136, 0.35), inset 0 0 15px rgba(0, 255, 136, 0.2)",
+                                  "0 0 35px rgba(0, 255, 136, 0.55), inset 0 0 20px rgba(0, 255, 136, 0.3)",
+                                  "0 0 25px rgba(0, 255, 136, 0.35), inset 0 0 15px rgba(0, 255, 136, 0.2)",
+                                ],
+                          }
+                        : { scale: 0.6, opacity: 0 }
+                    }
+                    transition={
+                      isInView
+                        ? {
+                            scale: hoveredNode
+                              ? { duration: 0.25 }
+                              : { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
+                            boxShadow: hoveredNode
+                              ? { duration: 0.25 }
+                              : { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
+                            opacity: { duration: 0.5, delay: shouldReduceMotion ? 0 : 0.3 },
+                          }
+                        : {}
+                    }
                   >
                     <span className="font-mono font-black text-xl sm:text-2xl text-[#00ff88] tracking-widest glow-green">
                       {initials}
@@ -197,14 +411,36 @@ export default function ProfileCard() {
                   </motion.div>
                 </div>
 
-                {/* SATELLITE FLOATING NODES */}
+                {/* SATELLITE FLOATING NODES - Step 5 Reveal & Hover Dynamics */}
                 {/* Node 5: Location (Top Center) */}
                 <motion.div
                   onMouseEnter={() => setHoveredNode("location")}
                   onMouseLeave={() => setHoveredNode(null)}
-                  className="satellite-node absolute top-[6%] left-1/2 -translate-x-1/2 flex items-center gap-2 cursor-default"
+                  initial={{ opacity: 0, scale: 0.8, x: "-50%" }}
+                  animate={
+                    isInView
+                      ? {
+                          opacity: isNodeDimmed("location") ? 0.35 : 1,
+                          scale: hoveredNode === "location" ? 1.05 : 1,
+                          y: hoveredNode === "location" ? -4 : 0,
+                          x: "-50%",
+                        }
+                      : { opacity: 0, scale: 0.8, x: "-50%" }
+                  }
+                  transition={
+                    isInView
+                      ? {
+                          opacity: { duration: 0.25, delay: shouldReduceMotion ? 0 : 1.26 },
+                          scale: { duration: 0.25, delay: hoveredNode ? 0 : (shouldReduceMotion ? 0 : 1.26) },
+                          y: { duration: 0.2 },
+                        }
+                      : {}
+                  }
+                  className="satellite-node absolute top-[6%] left-1/2 flex items-center gap-2 cursor-pointer"
                 >
-                  <MapPin className="w-4 h-4 text-[#00ff88]" />
+                  <motion.div animate={{ scale: hoveredNode === "location" ? 1.15 : 1 }}>
+                    <MapPin className="w-4 h-4 text-[#00ff88]" />
+                  </motion.div>
                   <div>
                     <div className="font-mono text-[9px] text-[#00ff88] font-semibold tracking-wider">LOCATION</div>
                     <div className="font-sans font-medium text-xs text-white">Andhra Pradesh, IN</div>
@@ -218,12 +454,34 @@ export default function ProfileCard() {
                   rel="noopener noreferrer"
                   onMouseEnter={() => setHoveredNode("github")}
                   onMouseLeave={() => setHoveredNode(null)}
-                  className="satellite-node absolute top-[14%] left-[4%] sm:left-[8%] flex items-center gap-2"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={
+                    isInView
+                      ? {
+                          opacity: isNodeDimmed("github") ? 0.35 : 1,
+                          scale: hoveredNode === "github" ? 1.05 : 1,
+                          y: hoveredNode === "github" ? -4 : 0,
+                        }
+                      : { opacity: 0, scale: 0.8 }
+                  }
+                  transition={
+                    isInView
+                      ? {
+                          opacity: { duration: 0.25, delay: shouldReduceMotion ? 0 : 0.90 },
+                          scale: { duration: 0.25, delay: hoveredNode ? 0 : (shouldReduceMotion ? 0 : 0.90) },
+                          y: { duration: 0.2 },
+                        }
+                      : {}
+                  }
+                  className="satellite-node absolute top-[14%] left-[4%] sm:left-[8%] flex items-center gap-2 cursor-pointer"
                 >
-                  {/* Inline GitHub SVG */}
-                  <svg className="w-4 h-4 text-[#00ff88] fill-current" viewBox="0 0 24 24">
+                  <motion.svg
+                    animate={{ scale: hoveredNode === "github" ? 1.15 : 1 }}
+                    className="w-4 h-4 text-[#00ff88] fill-current"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                  </svg>
+                  </motion.svg>
                   <div>
                     <div className="font-mono text-[9px] text-[#00ff88] font-semibold tracking-wider">GITHUB</div>
                     <div className="font-sans font-medium text-xs text-white flex items-center gap-1">
@@ -239,12 +497,34 @@ export default function ProfileCard() {
                   rel="noopener noreferrer"
                   onMouseEnter={() => setHoveredNode("linkedin")}
                   onMouseLeave={() => setHoveredNode(null)}
-                  className="satellite-node absolute top-[14%] right-[4%] sm:right-[8%] flex items-center gap-2"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={
+                    isInView
+                      ? {
+                          opacity: isNodeDimmed("linkedin") ? 0.35 : 1,
+                          scale: hoveredNode === "linkedin" ? 1.05 : 1,
+                          y: hoveredNode === "linkedin" ? -4 : 0,
+                        }
+                      : { opacity: 0, scale: 0.8 }
+                  }
+                  transition={
+                    isInView
+                      ? {
+                          opacity: { duration: 0.25, delay: shouldReduceMotion ? 0 : 1.02 },
+                          scale: { duration: 0.25, delay: hoveredNode ? 0 : (shouldReduceMotion ? 0 : 1.02) },
+                          y: { duration: 0.2 },
+                        }
+                      : {}
+                  }
+                  className="satellite-node absolute top-[14%] right-[4%] sm:right-[8%] flex items-center gap-2 cursor-pointer"
                 >
-                  {/* Inline LinkedIn SVG */}
-                  <svg className="w-4 h-4 text-[#00ff88] fill-current" viewBox="0 0 24 24">
+                  <motion.svg
+                    animate={{ scale: hoveredNode === "linkedin" ? 1.15 : 1 }}
+                    className="w-4 h-4 text-[#00ff88] fill-current"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
+                  </motion.svg>
                   <div>
                     <div className="font-mono text-[9px] text-[#00ff88] font-semibold tracking-wider">LINKEDIN</div>
                     <div className="font-sans font-medium text-xs text-white flex items-center gap-1">
@@ -262,9 +542,30 @@ export default function ProfileCard() {
                   }}
                   onMouseEnter={() => setHoveredNode("email")}
                   onMouseLeave={() => setHoveredNode(null)}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={
+                    isInView
+                      ? {
+                          opacity: isNodeDimmed("email") ? 0.35 : 1,
+                          scale: hoveredNode === "email" ? 1.05 : 1,
+                          y: hoveredNode === "email" ? -4 : 0,
+                        }
+                      : { opacity: 0, scale: 0.8 }
+                  }
+                  transition={
+                    isInView
+                      ? {
+                          opacity: { duration: 0.25, delay: shouldReduceMotion ? 0 : 1.14 },
+                          scale: { duration: 0.25, delay: hoveredNode ? 0 : (shouldReduceMotion ? 0 : 1.14) },
+                          y: { duration: 0.2 },
+                        }
+                      : {}
+                  }
                   className="satellite-node absolute bottom-[14%] left-[4%] sm:left-[8%] flex items-center gap-2 cursor-pointer z-30"
                 >
-                  <Mail className="w-4 h-4 text-[#00ff88]" />
+                  <motion.div animate={{ scale: hoveredNode === "email" ? 1.15 : 1 }}>
+                    <Mail className="w-4 h-4 text-[#00ff88]" />
+                  </motion.div>
                   <div>
                     <div className="font-mono text-[9px] text-[#00ff88] font-semibold tracking-wider">EMAIL</div>
                     <div className="font-sans font-medium text-xs text-white flex items-center gap-1">
@@ -280,12 +581,34 @@ export default function ProfileCard() {
                   rel="noopener noreferrer"
                   onMouseEnter={() => setHoveredNode("leetcode")}
                   onMouseLeave={() => setHoveredNode(null)}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={
+                    isInView
+                      ? {
+                          opacity: isNodeDimmed("leetcode") ? 0.35 : 1,
+                          scale: hoveredNode === "leetcode" ? 1.05 : 1,
+                          y: hoveredNode === "leetcode" ? -4 : 0,
+                        }
+                      : { opacity: 0, scale: 0.8 }
+                  }
+                  transition={
+                    isInView
+                      ? {
+                          opacity: { duration: 0.25, delay: shouldReduceMotion ? 0 : 1.38 },
+                          scale: { duration: 0.25, delay: hoveredNode ? 0 : (shouldReduceMotion ? 0 : 1.38) },
+                          y: { duration: 0.2 },
+                        }
+                      : {}
+                  }
                   className="satellite-node absolute bottom-[14%] right-[4%] sm:right-[8%] flex items-center gap-2 cursor-pointer"
                 >
-                  {/* Inline LeetCode SVG */}
-                  <svg className="w-4 h-4 text-[#00ff88] fill-current" viewBox="0 0 24 24">
+                  <motion.svg
+                    animate={{ scale: hoveredNode === "leetcode" ? 1.15 : 1 }}
+                    className="w-4 h-4 text-[#00ff88] fill-current"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.17 6.2a1.375 1.375 0 0 0-.011 1.936l4.137 4.195a1.374 1.374 0 0 0 1.948.012l5.352-5.76a1.374 1.374 0 0 0-.012-1.948L14.448.438A1.374 1.374 0 0 0 13.483 0zm-5.7 8.35L2.3 13.82a1.374 1.374 0 0 0 .012 1.948l5.352 5.76a1.374 1.374 0 0 0 1.948-.012l5.352-5.76a1.374 1.374 0 0 0-.012-1.948L10.815 9.61a1.375 1.375 0 0 0-1.936.012zM16.14 11.516a.85.85 0 0 0-.85.85v.006c0 .47.38.85.85.85h5.01a.85.85 0 0 0 .85-.85v-.006a.85.85 0 0 0-.85-.85h-5.01z" />
-                  </svg>
+                  </motion.svg>
                   <div>
                     <div className="font-mono text-[9px] text-[#00ff88] font-semibold tracking-wider">LEETCODE</div>
                     <div className="font-sans font-medium text-xs text-white flex items-center gap-1">
@@ -296,7 +619,12 @@ export default function ProfileCard() {
               </div>
 
               {/* BOTTOM TERMINAL FOOTER STATUS BAR */}
-              <div className="terminal-status-bar">
+              <motion.div
+                className="terminal-status-bar"
+                initial={{ opacity: 0, y: 10 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 1.4 }}
+              >
                 <div className="flex items-center gap-2 text-[#00ff88] font-semibold">
                   <span className="w-2 h-2 rounded-full bg-[#00ff88] shadow-[0_0_8px_#00ff88] animate-pulse" />
                   <span>● SYSTEM ONLINE</span>
@@ -304,7 +632,7 @@ export default function ProfileCard() {
                 <div className="text-[#8f9a91] tracking-widest text-[10px] uppercase">
                   SECURE CONNECTION
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* ════════════════════════════════════════════════════════════ */}
@@ -312,16 +640,20 @@ export default function ProfileCard() {
             {/* ════════════════════════════════════════════════════════════ */}
             <div className="lg:col-span-5 flex flex-col justify-between space-y-6 pt-2 lg:pt-0">
               {/* TOP HEADER */}
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+                transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.35 }}
+              >
                 <h2 className="font-sans font-black text-2xl sm:text-3xl text-white tracking-tight uppercase mb-2">
                   IDENTITY NODE
                 </h2>
                 <p className="font-mono text-xs text-[#8f9a91] leading-relaxed">
                   Access verified communication channels and downloadable professional assets through encrypted connections.
                 </p>
-              </div>
+              </motion.div>
 
-              {/* 3 PREMIUM CARDS */}
+              {/* 3 PREMIUM CARDS - Step 6 Reveal Sequence */}
               <div className="space-y-4 my-auto flex flex-col justify-center">
                 {/* Card 1: Resume / Professional Documentation */}
                 <motion.a
@@ -329,6 +661,9 @@ export default function ProfileCard() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="asset-card group"
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+                  transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -354,6 +689,9 @@ export default function ProfileCard() {
                   href={contact?.resumeUrl || "/Resume.pdf"}
                   download="Akash_Resume.pdf"
                   className="asset-card group"
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+                  transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.55, ease: [0.16, 1, 0.3, 1] }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -374,13 +712,35 @@ export default function ProfileCard() {
                   </div>
                 </motion.a>
 
-                {/* Card 3: Availability */}
+                {/* Card 3: Availability & Server LED breathing dot */}
                 <motion.div
                   className="asset-card"
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+                  transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.65, ease: [0.16, 1, 0.3, 1] }}
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className="p-3 rounded-lg bg-[rgba(0,255,136,0.1)] border border-[rgba(0,255,136,0.2)] flex items-center justify-center">
-                    <span className="w-3 h-3 rounded-full bg-[#00ff88] shadow-[0_0_10px_#00ff88] animate-pulse" />
+                    <motion.span
+                      className="w-3 h-3 rounded-full bg-[#00ff88]"
+                      animate={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              opacity: [1, 0.4, 1],
+                              boxShadow: [
+                                "0 0 10px #00ff88",
+                                "0 0 3px rgba(0, 255, 136, 0.4)",
+                                "0 0 10px #00ff88",
+                              ],
+                            }
+                      }
+                      transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-mono text-[10px] text-[#8f9a91] uppercase tracking-wider font-semibold">
@@ -394,10 +754,15 @@ export default function ProfileCard() {
               </div>
 
               {/* Decorative Terminal Cursor */}
-              <div className="flex items-center justify-between font-mono text-[10px] text-[#8f9a91] border-t border-[rgba(0,255,136,0.1)] pt-3 mt-2">
+              <motion.div
+                className="flex items-center justify-between font-mono text-[10px] text-[#8f9a91] border-t border-[rgba(0,255,136,0.1)] pt-3 mt-2"
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.75 }}
+              >
                 <span>IDENTITY_HASH: 0x8F92A0</span>
                 <span className="text-[#00ff88] animate-pulse">_</span>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>

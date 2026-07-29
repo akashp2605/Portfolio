@@ -55,7 +55,7 @@ export const projects: Project[] = [
     status: "IN_PROGRESS",
     links: [
       { label: "live", href: "#" },
-      { label: "source", href: "https://github.com/Akash90877/Sellex--E-Commerce_Platform" },
+      { label: "source", href: "https://github.com/akashp2605/Sellex--E-Commerce_Platform" },
     ],
   },
   {
@@ -68,7 +68,7 @@ export const projects: Project[] = [
     status: "SHIPPED",
     links: [
       { label: "live", href: "https://geoflowai.netlify.app/" },
-      { label: "source", href: "https://github.com/Akash90877/GeoFlow" },
+      { label: "source", href: "https://github.com/akashp2605/GeoFlow" },
     ],
   },
 ];
@@ -86,12 +86,12 @@ export const stack: SkillGroup[] = [
     description: "Building scalable RESTful applications using Java and Spring technologies.",
     accent: "#00ff88",
     techs: [
-      { name: "Java",            color: "#f89820", icon: "java" },
-      { name: "Spring Boot",     color: "#6db33f", icon: "springboot" },
+      { name: "Java", color: "#f89820", icon: "java" },
+      { name: "Spring Boot", color: "#6db33f", icon: "springboot" },
       { name: "Spring Security", color: "#6db33f", icon: "springsecurity" },
-      { name: "Hibernate",       color: "#bcae79", icon: "hibernate" },
-      { name: "REST API",        color: "#00ff88", icon: "rest" },
-      { name: "Maven",           color: "#c71a36", icon: "maven" },
+      { name: "Hibernate", color: "#bcae79", icon: "hibernate" },
+      { name: "REST API", color: "#00ff88", icon: "rest" },
+      { name: "Maven", color: "#c71a36", icon: "maven" },
     ],
   },
   {
@@ -99,11 +99,11 @@ export const stack: SkillGroup[] = [
     description: "Developing modern responsive user interfaces.",
     accent: "#00e5ff",
     techs: [
-      { name: "React.js",      color: "#61dafb", icon: "react" },
-      { name: "Next.js",       color: "#ffffff", icon: "nextjs" },
-      { name: "HTML5",         color: "#e34f26", icon: "html5" },
-      { name: "CSS3",          color: "#1572b6", icon: "css3" },
-      { name: "JavaScript",    color: "#f7df1e", icon: "javascript" },
+      { name: "React.js", color: "#61dafb", icon: "react" },
+      { name: "Next.js", color: "#ffffff", icon: "nextjs" },
+      { name: "HTML5", color: "#e34f26", icon: "html5" },
+      { name: "CSS3", color: "#1572b6", icon: "css3" },
+      { name: "JavaScript", color: "#f7df1e", icon: "javascript" },
     ],
   },
   {
@@ -111,10 +111,10 @@ export const stack: SkillGroup[] = [
     description: "Designing reliable and scalable data storage solutions.",
     accent: "#8b5cf6",
     techs: [
-      { name: "MySQL",      color: "#4479a1", icon: "mysql" },
+      { name: "MySQL", color: "#4479a1", icon: "mysql" },
       { name: "PostgreSQL", color: "#336791", icon: "postgresql" },
-      { name: "Redis",      color: "#dc382d", icon: "redis" },
-      { name: "Firebase",   color: "#ffca28", icon: "firebase" },
+      { name: "Redis", color: "#dc382d", icon: "redis" },
+      { name: "Firebase", color: "#ffca28", icon: "firebase" },
     ],
   },
   {
@@ -122,7 +122,7 @@ export const stack: SkillGroup[] = [
     description: "Deploying and managing modern applications.",
     accent: "#f59e0b",
     techs: [
-      { name: "Docker",     color: "#2496ed", icon: "docker" },
+      { name: "Docker", color: "#2496ed", icon: "docker" },
       { name: "Kubernetes", color: "#326ce5", icon: "kubernetes" },
     ],
   },
@@ -132,12 +132,12 @@ export type TimelineEntry = {
   date: string;
   title: string;
   org: string;
-  type:  "work" | "education";
+  type: "work" | "education";
   description: string;
 };
 
 export const timeline: TimelineEntry[] = [
-   {
+  {
     date: "May 2026 - July 2026",
     title: "Java Full Stack Intern",
     org: "VaultShpere AI Technologies",
@@ -153,7 +153,7 @@ export const timeline: TimelineEntry[] = [
     description:
       "Aspired to become a software engineer, focusing on full-stack development, cloud computing, and open-source contributions. Engaged in various projects and hackathons to enhance practical skills.",
   },
- 
+
 ];
 
 export type Award = {
@@ -161,7 +161,7 @@ export type Award = {
   issuer: string;
   date: string;
   description: string;
-  type:"cert" | "honor" | "hackathon";
+  type: "cert" | "honor" | "hackathon";
   certificate?: string;
 };
 
@@ -173,8 +173,8 @@ export const awards: Award[] = [
     description: "Hosted and coordinated technical competitions for college students, fostering problem-solving, programming, and collaborative learning.",
     type: "honor",
     certificate: "/certificates/Coding Club.pdf",
-    },
-    {
+  },
+  {
     title: "Technical Quiz Host",
     issuer: "Department of Computer Science(AI&ML), Kuppam Engineering College",
     date: "Aug 2025",
@@ -198,7 +198,7 @@ export const awards: Award[] = [
     type: "cert",
     certificate: "/certificates/quantum-computing.pdf",
   },
-  
+
 ];
 
 export const contact = {
