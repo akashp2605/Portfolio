@@ -6,9 +6,9 @@ import { contact } from "@/lib/data";
 import { externalLinkProps } from "@/lib/links";
 
 const SOCIAL = [
-  { label: "github.open()",   href: contact.github,   color: "#00ff88" },
-  { label: "linkedin.connect()", href: contact.linkedin,  color: "#00e5ff" },
-  { label: "resume.view()",   href: contact.resumeUrl, color: "#f0f0f0" },
+  { label: "github.open()", href: contact.github, color: "#00ff88" },
+  { label: "linkedin.connect()", href: contact.linkedin, color: "#00e5ff" },
+  { label: "resume.view()", href: contact.resumeUrl, color: "#f0f0f0" },
 ];
 
 export default function Contact() {
@@ -66,7 +66,7 @@ export default function Contact() {
         transition={{ delay: 0.2 }}
         className="text-muted text-sm mb-12 max-w-md"
       >
-       Secure channel active. Open to opportunities, collaborations, and building exceptional software together.
+        Secure channel active. Open to opportunities, collaborations, and building exceptional software together.
       </motion.p>
 
       <div className="grid lg:grid-cols-2 gap-12">
@@ -175,7 +175,7 @@ export default function Contact() {
                     whileTap={!loading ? { scale: 0.98 } : {}}
                     className="w-full py-3 font-mono text-sm font-bold text-bg bg-green rounded transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {loading ? "SENDING..." : "./send_message.sh"}
+                    {loading ? "TRANSMITTING..." : "./transmit_payload.sh"}
                   </motion.button>
                 </motion.form>
               )}
