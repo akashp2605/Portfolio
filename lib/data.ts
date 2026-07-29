@@ -205,5 +205,6 @@ export const contact = {
   email: "akashp2605@gmail.com",
   github: "https://github.com/akashp2605",
   linkedin: "https://www.linkedin.com/in/akash-p-77709a331",
+  instagram: "https://www.instagram.com/itzz.akasshh",
   resumeUrl: "/Resume.pdf",
 };

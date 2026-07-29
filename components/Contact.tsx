@@ -77,19 +77,6 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <div
-            className="p-6 rounded-xl border border-white/8 font-mono text-sm mb-8"
-            style={{ background: "rgba(12,15,12,0.85)", backdropFilter: "blur(24px)", boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)" }}
-          >
-            <div className="text-dim mb-4 text-xs">$ cat contact.json</div>
-            <div className="space-y-2 text-xs">
-              <div><span className="text-green">"email"</span><span className="text-dim">:</span> <span className="text-cyan">"{contact.email}"</span></div>
-              <div><span className="text-green">"github"</span><span className="text-dim">:</span> <span className="text-cyan">"{contact.github}"</span></div>
-              <div><span className="text-green">"linkedin"</span><span className="text-dim">:</span> <span className="text-cyan">"{contact.linkedin}"</span></div>
-              <div><span className="text-green">"status"</span><span className="text-dim">:</span> <span className="text-green">"available"</span></div>
-            </div>
-          </div>
-
           <div className="space-y-3">
             {SOCIAL.map((s) => (
               <motion.a
