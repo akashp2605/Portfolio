@@ -40,14 +40,14 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-32 px-6 md:px-16 max-w-7xl mx-auto pb-40">
+    <section id="contact" className="py-16 md:py-32 px-4 sm:px-6 md:px-16 max-w-7xl mx-auto pb-24 md:pb-40">
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="flex items-center gap-4 mb-16"
+        className="flex items-center gap-4 mb-8 sm:mb-16"
       >
-        <span className="font-mono text-xs text-green tracking-widest">// 07_CONTACT</span>
+        <span className="font-mono text-xs text-green tracking-widest">// 06_CONTACT</span>
         <div className="flex-1 h-px bg-line-bright max-w-xs" />
       </motion.div>
 
@@ -55,7 +55,7 @@ export default function Contact() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="font-sans font-bold text-4xl md:text-5xl text-text mb-4"
+        className="font-sans font-bold text-3xl sm:text-4xl md:text-5xl text-text mb-3 sm:mb-4"
       >
         Open <span className="text-green">Secure Channel</span>
       </motion.h2>
@@ -64,12 +64,12 @@ export default function Contact() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2 }}
-        className="text-muted text-sm mb-12 max-w-md"
+        className="text-muted text-sm mb-8 sm:mb-12 max-w-md leading-relaxed"
       >
         Secure channel active. Open to opportunities, collaborations, and building exceptional software together.
       </motion.p>
 
-      <div className="grid lg:grid-cols-2 gap-12">
+      <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
         {/* Left — info */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -77,14 +77,14 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {SOCIAL.map((s) => (
               <motion.a
                 key={s.label}
                 href={s.href}
                 {...externalLinkProps(s.href)}
                 whileHover={{ x: 6, color: s.color }}
-                className="flex items-center gap-3 font-mono text-sm text-muted transition-colors"
+                className="flex items-center gap-3 font-mono text-sm text-muted transition-colors py-3 px-1 min-h-[44px] border-b border-white/4 sm:border-0"
               >
                 <span className="text-green-dim">&gt;</span>
                 <span>{s.label}</span>
@@ -111,7 +111,7 @@ export default function Contact() {
             <span className="ml-3 font-mono text-[11px] text-dim">sendmessage.sh</span>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <AnimatePresence mode="wait">
               {sent ? (
                 <motion.div
@@ -137,7 +137,7 @@ export default function Contact() {
                         onChange={(e) => setForm({ ...form, [field]: e.target.value })}
                         onFocus={() => setFocused(field)}
                         onBlur={() => setFocused(null)}
-                        className="w-full bg-bg border rounded px-3 py-2.5 font-mono text-sm text-text outline-none transition-all"
+                        className="w-full bg-bg border rounded px-3 py-3 min-h-[44px] font-mono text-sm text-text outline-none transition-all"
                         style={{
                           borderColor: focused === field ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.08)",
                           boxShadow: focused === field ? "0 0 16px rgba(0,255,136,0.15)" : "none",
@@ -157,7 +157,7 @@ export default function Contact() {
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       onFocus={() => setFocused("message")}
                       onBlur={() => setFocused(null)}
-                      className="w-full bg-bg border rounded px-3 py-2.5 font-mono text-sm text-text outline-none transition-all resize-none"
+                      className="w-full bg-bg border rounded px-3 py-3 font-mono text-sm text-text outline-none transition-all resize-none"
                       style={{
                         borderColor: focused === "message" ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.08)",
                         boxShadow: focused === "message" ? "0 0 16px rgba(0,255,136,0.15)" : "none",
@@ -173,7 +173,7 @@ export default function Contact() {
                     disabled={loading}
                     whileHover={!loading ? { scale: 1.02, boxShadow: "0 0 28px rgba(0,255,136,0.45), 0 0 60px rgba(0,255,136,0.15)" } : {}}
                     whileTap={!loading ? { scale: 0.98 } : {}}
-                    className="w-full py-3 font-mono text-sm font-bold text-bg bg-green rounded transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full py-3.5 min-h-[48px] font-mono text-sm font-bold text-bg bg-green rounded transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
                   >
                     {loading ? "TRANSMITTING..." : "./transmit_payload.sh"}
                   </motion.button>

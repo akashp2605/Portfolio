@@ -26,7 +26,7 @@ function Corner({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) {
   );
 }
 
-export default function ProfileImage({ scanDone }: { scanDone: boolean }) {
+export default function ProfileImage({ scanDone, compact = false }: { scanDone: boolean; compact?: boolean }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -66,8 +66,8 @@ export default function ProfileImage({ scanDone }: { scanDone: boolean }) {
         transition={{ type: "spring", stiffness: 220, damping: 24 }}
         className="relative rounded-2xl overflow-hidden"
         style={{
-          width: "clamp(200px, 22vw, 300px)",
-          height: "clamp(250px, 28vw, 375px)",
+          width: compact ? "clamp(150px, 36vw, 210px)" : "clamp(200px, 22vw, 300px)",
+          height: compact ? "clamp(195px, 46vw, 270px)" : "clamp(250px, 28vw, 375px)",
           background: "rgba(8,12,10,0.92)",
           backdropFilter: "blur(20px)",
           border: `1px solid ${hovered ? "rgba(0,255,136,0.38)" : "rgba(0,255,136,0.16)"}`,

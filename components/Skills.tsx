@@ -37,19 +37,19 @@ function TechBadge({ tech, accent }: { tech: Tech; accent: string }) {
     <motion.div
       whileHover={{ y: -4, scale: 1.06 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="group flex flex-col items-center gap-2 p-3 rounded-xl border border-white/6
-                 bg-white/[0.04] cursor-default select-none transition-all"
+      className="group flex flex-col items-center gap-1.5 p-2 sm:p-3 rounded-xl border border-white/6
+                 bg-white/[0.04] cursor-default select-none transition-all min-w-0"
       style={{ "--accent": accent } as React.CSSProperties}
     >
       <motion.div
         whileHover={{ scale: 1.15 }}
         transition={{ type: "spring", stiffness: 400, damping: 15 }}
-        className="text-2xl transition-all duration-300"
+        className="text-xl sm:text-2xl transition-all duration-300"
         style={{ color: tech.color, filter: `drop-shadow(0 0 6px ${tech.color}66)` }}
       >
         <Icon />
       </motion.div>
-      <span className="font-mono text-[10px] text-dim group-hover:text-text transition-colors text-center leading-tight">
+      <span className="font-mono text-[9px] sm:text-[10px] text-dim group-hover:text-text transition-colors text-center leading-tight w-full truncate">
         {tech.name}
       </span>
     </motion.div>
@@ -66,7 +66,7 @@ function CategoryCard({ group, index }: { group: SkillGroup; index: number }) {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ borderColor: `${group.accent}44`, y: -6, boxShadow: `0 24px 64px rgba(0,0,0,0.7), 0 0 40px ${group.accent}12` }}
-      className="relative p-6 rounded-2xl border overflow-hidden transition-all duration-300"
+      className="relative p-4 sm:p-6 rounded-2xl border overflow-hidden transition-all duration-300"
       style={{ background: "rgba(12,15,12,0.88)", backdropFilter: "blur(28px)", borderColor: `${group.accent}18`, boxShadow: "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)" }}
     >
       {/* corner glow */}
@@ -83,13 +83,13 @@ function CategoryCard({ group, index }: { group: SkillGroup; index: number }) {
         >
           <CatIcon size={18} />
         </div>
-        <h3 className="font-sans font-semibold text-lg text-text">{group.category}</h3>
+        <h3 className="font-sans font-semibold text-base sm:text-lg text-text">{group.category}</h3>
       </div>
 
-      <p className="font-mono text-xs text-dim mb-5 leading-relaxed">{group.description}</p>
+      <p className="font-mono text-xs text-dim mb-4 sm:mb-5 leading-relaxed">{group.description}</p>
 
       {/* tech grid */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-4 gap-2 sm:gap-2.5">
         {group.techs.map((tech) => (
           <TechBadge key={tech.name} tech={tech} accent={group.accent} />
         ))}
@@ -101,7 +101,7 @@ function CategoryCard({ group, index }: { group: SkillGroup; index: number }) {
 // ── Section ────────────────────────────────────────────────────────────────
 export default function Skills() {
   return (
-    <section id="skills" className="py-32 px-6 md:px-16 max-w-7xl mx-auto">
+    <section id="skills" className="py-16 md:py-32 px-4 sm:px-6 md:px-16 max-w-7xl mx-auto">
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -116,7 +116,7 @@ export default function Skills() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="font-sans font-bold text-4xl md:text-5xl text-text mb-14"
+        className="font-sans font-bold text-3xl sm:text-4xl md:text-5xl text-text mb-8 sm:mb-14"
       >
         Tech <span className="text-green">Stack</span>
       </motion.h2>

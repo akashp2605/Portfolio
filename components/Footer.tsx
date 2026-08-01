@@ -16,15 +16,15 @@ export default function Footer() {
 
   return (
     <footer
-      className="border-t border-white/8 py-8 px-6 md:px-16"
+      className="border-t border-white/8 py-8 px-4 sm:px-6 md:px-16"
       style={{ background: "rgba(6,8,6,0.92)", backdropFilter: "blur(24px)" }}
     >
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
         <div className="font-mono text-xs text-dim">
           <span className="text-green">&gt;_</span> PORTFOLIO.EXE — @2026 Akash.
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center justify-center gap-4 sm:gap-6">
           {socialLinks.map((s, index) => {
             const Icon = s.Icon;
             return (
@@ -57,7 +57,7 @@ export default function Footer() {
                     filter: "drop-shadow(0 0 8px rgba(0,255,136,0.7))",
                   }}
                   transition={{ duration: 0.25, ease: "easeOut" }}
-                  className="text-[#00ff88]/80 hover:text-[#00ff88] transition-colors cursor-pointer"
+                  className="text-[#00ff88]/80 hover:text-[#00ff88] transition-colors cursor-pointer w-11 h-11 flex items-center justify-center rounded-lg active:bg-white/5"
                 >
                   <Icon size={22} />
                 </motion.a>
@@ -74,7 +74,7 @@ export default function Footer() {
             color: "#00ff88",
             boxShadow: "0 0 14px rgba(0,255,136,0.2)",
           }}
-          className="font-mono text-xs text-muted border border-white/10 px-3 py-1.5 rounded transition-all"
+          className="font-mono text-xs text-muted border border-white/10 px-4 py-2.5 min-h-[44px] flex items-center justify-center rounded transition-all active:bg-white/5"
         >
           ↑ TOP
         </motion.button>

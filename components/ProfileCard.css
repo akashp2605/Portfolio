@@ -61,17 +61,22 @@
   box-shadow: 0 0 35px rgba(0, 255, 136, 0.5), inset 0 0 20px rgba(0, 255, 136, 0.3);
 }
 
-/* Satellite Node Card */
 .satellite-node {
   background: rgba(12, 18, 15, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(0, 255, 136, 0.15);
   border-radius: 0.75rem;
-  padding: 0.6rem 0.9rem;
+  padding: 0.45rem 0.65rem;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   z-index: 20;
+}
+
+@media (min-width: 640px) {
+  .satellite-node {
+    padding: 0.6rem 0.9rem;
+  }
 }
 
 .satellite-node:hover {

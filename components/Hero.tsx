@@ -256,7 +256,7 @@ export default function Hero() {
       </div>
 
       {/* ── MOBILE layout ── */}
-      <div className="lg:hidden relative z-10 w-full max-w-2xl mx-auto px-5 pt-24 pb-10">
+      <div className="lg:hidden relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 pt-20 sm:pt-24 pb-10">
         <AnimatePresence>
           {scanDone && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
@@ -277,10 +277,10 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 transition={{ duration: 0.6, delay: 0.15, ease }}
-                className="font-sans font-bold leading-[0.9] tracking-tight"
-                style={{ fontSize: "clamp(2.6rem, 12vw, 4rem)" }}
+                className="font-sans font-bold leading-[0.92] tracking-tight"
+                style={{ fontSize: "clamp(2.4rem, 11vw, 3.8rem)" }}
               >
-                <span className="block text-muted font-mono text-sm mb-1.5 font-normal">// IDENTITY</span>
+                <span className="block text-muted font-mono text-xs sm:text-sm mb-1.5 font-normal">// IDENTITY</span>
                 <span className="text-text">I&apos;m </span>
                 <span className="text-green" style={{ textShadow: "0 0 24px rgba(0,255,136,0.4)" }}>{identity.name}</span>
               </motion.h1>
@@ -308,18 +308,18 @@ export default function Hero() {
               <motion.div
                 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.4 }}
-                className="mt-5 flex flex-wrap gap-3"
+                className="mt-5 flex flex-wrap items-center gap-3"
               >
                 <motion.a href="#projects" data-cursor="button"
                   whileTap={{ scale: 0.97 }}
-                  className="relative px-5 py-2.5 font-mono text-sm font-bold text-bg bg-green rounded overflow-hidden"
+                  className="relative px-6 py-3 min-h-[44px] flex items-center justify-center w-full xs:w-auto font-mono text-sm font-bold text-bg bg-green rounded overflow-hidden"
                   style={{ boxShadow: "0 0 16px rgba(0,255,136,0.25)" }}
                 >
                   <span className="relative z-10">VIEW_WORK()</span>
                 </motion.a>
                 <motion.a href="#contact" data-cursor="button"
                   whileTap={{ scale: 0.97 }}
-                  className="px-5 py-2.5 font-mono text-sm font-bold text-cyan border border-cyan/40 rounded"
+                  className="px-6 py-3 min-h-[44px] flex items-center justify-center w-full xs:w-auto font-mono text-sm font-bold text-cyan border border-cyan/40 rounded"
                   style={{ background: "rgba(0,229,255,0.04)" }}
                 >
                   CONTACT_ME()
@@ -329,7 +329,7 @@ export default function Hero() {
               {/* Stats row */}
               <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.75 }}
-                className="mt-5 flex items-center gap-6"
+                className="mt-6 flex items-center gap-6"
               >
                 {STATS.map((s, i) => (
                   <div key={s.label} className="relative">
@@ -369,14 +369,12 @@ export default function Hero() {
                   </motion.span>
                 </div>
 
-                {/* Profile + terminal side by side */}
-                <div className="flex flex-col xs:flex-row sm:flex-row gap-0">
+                {/* Profile + terminal stacked on small mobile, side-by-side on sm+ */}
+                <div className="flex flex-col sm:flex-row gap-0">
                   {/* Profile image — left */}
-                  <div className="flex items-center justify-center p-4 sm:p-5 sm:border-r"
+                  <div className="flex items-center justify-center p-4 sm:p-5 border-b sm:border-b-0 sm:border-r"
                     style={{ borderColor: "rgba(0,255,136,0.08)" }}>
-                    <div style={{ transform: "scale(0.72)", transformOrigin: "center" }}>
-                      <ProfileImage scanDone={scanDone} />
-                    </div>
+                    <ProfileImage scanDone={scanDone} compact />
                   </div>
 
                   {/* Terminal — right */}
