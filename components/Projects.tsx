@@ -11,7 +11,7 @@ const STATUS_STYLE: Record<string, { color: string; glow: string }> = {
   ARCHIVED:    { color: "#444",    glow: "none" },
 };
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+function ProjectCard({ project, index }: { project: (typeof projects)[0]; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);

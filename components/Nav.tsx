@@ -70,7 +70,7 @@ export default function Nav() {
             {SECTIONS.map((s) => (
               <button
                 key={s.id}
-                onClick={() => scrollTo(s.id)}
+                onClick={() => { scrollTo(s.id); }}
                 className="relative px-3 py-2 font-mono text-[11px] tracking-widest transition-colors hover:text-text"
                 style={{ color: active === s.id ? "#00ff88" : "#999" }}
               >
