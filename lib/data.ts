@@ -64,7 +64,7 @@ export const projects: Project[] = [
     tagline: "A Ground Water AI assistant for real-time monitoring and prediction of groundwater levels.",
     description:
       "Developed a real-time groundwater monitoring system using AI models. Implemented predictive analytics for water level forecasting and alerting.",
-    stack: ["Python", "React", "FastAPI", "Google Cloud AI"],
+    stack: ["Python", "React", "FastAPI", "Google Cloud AI", "Gemini API"],
     status: "SHIPPED",
     links: [
       { label: "live", href: "https://geoflowai.netlify.app/" },
