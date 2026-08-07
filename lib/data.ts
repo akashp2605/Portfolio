@@ -3,9 +3,8 @@ import { title } from "process";
 export const identity = {
   name: "Akash",
   roles: [
-    "Full Stack Developer",
+    "Java Full Stack Developer",
     "Spring Boot Developer",
-    "Open Source Contributor",
   ],
   location: "Kuppam, Andhra Pradesh, India",
   status: "AVAILABLE FOR OPPORTUNITIES",
@@ -29,7 +28,7 @@ export const about = {
   ],
   stats: [
     { label: "Projects Shipped", value: "8+" },
-    { label: "GitHub Stars", value: "10+" },
+    { label: "GitHub Stars", value: "5+" },
     { label: "Contributions", value: "200+" },
   ],
 };
