@@ -92,7 +92,7 @@ export const projects: Project[] = [
   ],
 },
 {
-  id: "Proj-03",
+  id: "Proj-04",
   title: "HotelEase",
   tagline: "A modern hotel management system for efficient hotel operations.",
   description:
