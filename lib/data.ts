@@ -50,11 +50,10 @@ export const projects: Project[] = [
     tagline: "A E-Commerce platform for small businesses to sell online.",
     description:
       "Developed a full-stack e-commerce platform with real-time inventory management,order processing and analytics dashboard. Implemented microservices architecture for scalability.",
-    stack: ["React", "Spring Boot", "Java", "JWT Authentication", "MySQL & Firebase"],
+    stack: ["React", "Spring Boot", "Java", "JWT Authentication", "Aiven MySQL & Firebase"],
     status: "IN_PROGRESS",
     links: [
-      { label: "live", href: "#" },
-      { label: "source", href: "https://github.com/akashp2605/Sellex--E-Commerce_Platform" },
+      { label: "Source", href: "https://github.com/akashp2605/Sellex--E-Commerce_Platform" },
     ],
   },
   {
@@ -66,10 +65,52 @@ export const projects: Project[] = [
     stack: ["Python", "React", "FastAPI", "Google Cloud AI", "Gemini API"],
     status: "SHIPPED",
     links: [
-      { label: "live", href: "https://geoflowai.netlify.app/" },
-      { label: "source", href: "https://github.com/akashp2605/GeoFlow" },
+      { label: "Live", href: "https://geoflowai.netlify.app/" },
+      { label: "Source", href: "https://github.com/akashp2605/GeoFlow" },
     ],
   },
+  {
+  id: "Proj-03",
+  title: "CareSync",
+  tagline: "A comprehensive hospital management system for streamlined healthcare operations.",
+  description:
+    "Developed a full-stack hospital management system to manage patients, doctors, appointments, prescriptions, departments, and specialities. Implemented role-based access control to provide secure and role-specific access to healthcare data and operations.",
+  stack: [
+    "React",
+    "Spring Boot",
+    "Java",
+    "Aiven MySQL",
+    "Docker",
+    "JWT Authentication"
+  ],
+
+  status: "SHIPPED",
+
+  links: [
+    { label: "Live", href: "https://careesync.vercel.app/" },
+    { label: "Source", href: "https://github.com/akashp2605/CareSync" },
+  ],
+},
+{
+  id: "Proj-03",
+  title: "HotelEase",
+  tagline: "A modern hotel management system for efficient hotel operations.",
+  description:
+    "Developed a full-stack hotel management system to streamline hotel operations including guest management, room management, reservations, billing, restaurant orders, inventory, and staff operations. Built a structured backend with Spring Boot and a responsive React frontend for managing day-to-day hotel activities.",
+  stack: [
+    "React",
+    "Spring Boot",
+    "Java",
+    "Aiven MySQL",
+    "JWT Authentication",
+    "REST APIs"
+  ],
+  status: "IN_PROGRESS",
+  links: [
+    { label: "Live", href: "https://grandluxee.vercel.app" },
+    { label: "Source", href: "https://github.com/akashp2605/Hotel-Management-System" },
+  ],
+},
 ];
 export type Tech = { name: string; color: string; icon: string };
 export type SkillGroup = {
