@@ -175,7 +175,7 @@ export default function Contact() {
                     whileTap={!loading ? { scale: 0.98 } : {}}
                     className="w-full py-3.5 min-h-[48px] font-mono text-sm font-bold text-bg bg-green rounded transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
                   >
-                    {loading ? "TRANSMITTING..." : "./transmit_payload.sh"}
+                  {loading ? "TRANSMITTING..." : "TRANSMIT PAYLOAD →"}
                   </motion.button>
                 </motion.form>
               )}

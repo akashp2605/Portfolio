@@ -226,7 +226,7 @@ export const awards: Award[] = [
     title: "National Level Hackathon Participant",
     issuer: "24-hour Hackathon, Sri Manakula Vinayagar Engineering College",
     date: "Sep 2025",
-    description: "Participated in a national-level 24-hour hackathon, successfully advancing to Stage 3 of 5 by demonstrating strong problem-solving, teamwork, and software development skills.",
+    description: "Participated in a national-level 24-hour hackathon, advancing to Stage 3 of 5 by demonstrating strong problem-solving and teamwork.",
     type: "cert",
     certificate: "/certificates/Hackathon-Pondi.pdf",
   },

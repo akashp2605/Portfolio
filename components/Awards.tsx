@@ -6,35 +6,49 @@ import { awards } from "@/lib/data";
 import { ArrowUpRight } from "lucide-react";
 import BorderGlow from "@/components/BorderGlow";
 
-const TYPE_STYLE = {
-  cert: { 
-    color: "#2DD4BF", 
-    label: "Certificate",
-    border: "rgba(45,212,191,0.25)",
-    glow: "rgba(45,212,191,0.18)",
-    badgeBg: "rgba(45,212,191,0.12)",
-  },
-  honor: { 
-    color: "#7C6CF3", 
-    label: "Leadership",
-    border: "rgba(124,108,243,0.25)",
-    glow: "rgba(124,108,243,0.18)",
-    badgeBg: "rgba(124,108,243,0.12)",
-  },
-  hackathon: { 
-    color: "#00C97A", 
-    label: "Hackathon",
-    border: "rgba(0,201,122,0.25)",
-    glow: "rgba(0,201,122,0.18)",
-    badgeBg: "rgba(0,201,122,0.12)",
-  },
+const TYPE_LABEL: Record<string, string> = {
+  cert: "Certificate",
+  honor: "Leadership",
+  hackathon: "Hackathon",
 };
+
+const SHARED_STYLE = {
+  color: "#00ff88",
+  border: "rgba(0,255,136,0.25)",
+  glow: "rgba(0,255,136,0.18)",
+  badgeBg: "rgba(0,255,136,0.10)",
+};
+
+// Cosmetic accents per card index — purely decorative, zero height impact
+const ACCENTS = [
+  // 0: corner dot
+  ({ style }: { style: typeof SHARED_STYLE }) => (
+    <div className="absolute top-5 right-5 w-2 h-2 rounded-full opacity-60" style={{ background: style.color }} />
+  ),
+  // 1: top-right corner bracket
+  ({ style }: { style: typeof SHARED_STYLE }) => (
+    <div className="absolute top-4 right-4 w-5 h-5 opacity-30"
+      style={{ borderTop: `2px solid ${style.color}`, borderRight: `2px solid ${style.color}` }} />
+  ),
+  // 2: bottom-left corner bracket
+  ({ style }: { style: typeof SHARED_STYLE }) => (
+    <div className="absolute bottom-4 left-4 w-5 h-5 opacity-30"
+      style={{ borderBottom: `2px solid ${style.color}`, borderLeft: `2px solid ${style.color}` }} />
+  ),
+  // 3: faded year watermark (absolute, no layout impact)
+  ({ style, award }: { style: typeof SHARED_STYLE; award: typeof awards[0] }) => (
+    <div className="absolute bottom-6 right-6 font-mono font-bold text-6xl select-none pointer-events-none"
+      style={{ color: style.color, opacity: 0.05, lineHeight: 1 }}>
+      {award.date.split(" ").pop()}
+    </div>
+  ),
+];
 
 function CredentialCard({ award, index }: { award: typeof awards[0]; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [buttonHovered, setButtonHovered] = useState(false);
-  const style = TYPE_STYLE[award.type] || TYPE_STYLE.cert;
-  const year = award.date.split("-")[2] || "2025";
+  const style = { ...SHARED_STYLE, label: TYPE_LABEL[award.type] ?? award.type };
+  const Accent = ACCENTS[index % ACCENTS.length];
 
   return (
     <motion.div
@@ -44,76 +58,38 @@ function CredentialCard({ award, index }: { award: typeof awards[0]; index: numb
       transition={{ duration: 0.5, delay: index * 0.1 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      className="group relative"
+      className="group relative h-full"
     >
-      <BorderGlow color={style.color}>
-        {/* Glass card */}
+      <BorderGlow color={style.color} className="h-full">
         <motion.div
-          className="relative overflow-hidden rounded-[24px] sm:rounded-[28px] p-5 sm:p-8 flex flex-col justify-between h-full"
-          style={{
-            background: hovered ? "rgba(15,18,22,0.9)" : "rgba(15,18,22,0.82)",
-            backdropFilter: "blur(12px)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            boxShadow: hovered 
-              ? `0 0 40px ${style.glow}, 0 12px 40px rgba(0,0,0,0.5)` 
-              : "0 4px 24px rgba(0,0,0,0.3)",
-          }}
           whileHover={{ y: -4 }}
           transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="h-full"
         >
-          {/* Left accent border */}
-          <div 
-            className="absolute left-0 top-0 bottom-0 w-1 rounded-l-[24px] sm:rounded-l-[28px]"
-            style={{ background: style.color }}
-          />
+          <div
+            className="relative overflow-hidden rounded-[24px] p-5 sm:p-8 flex flex-col h-full"
+            style={{
+              background: hovered ? "rgba(15,18,22,0.9)" : "rgba(15,18,22,0.82)",
+              backdropFilter: "blur(12px)",
+              border: `1px solid ${style.border}`,
+              boxShadow: hovered ? `0 0 40px ${style.glow}, 0 12px 40px rgba(0,0,0,0.5)` : "0 4px 24px rgba(0,0,0,0.3)",
+            }}
+          >
+            <Accent style={style} award={award} />
 
-          <div>
-            {/* Top row: Category badge and date */}
-            <div className="flex items-center justify-between mb-5 sm:mb-8">
-              <span
-                className="font-mono text-[10px] px-3 py-1.5 rounded-full uppercase tracking-wider"
-                style={{
-                  color: style.color,
-                  background: style.badgeBg,
-                  border: `1px solid ${style.border}`,
-                }}
-              >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <span className="font-mono text-[10px] px-3 py-1.5 rounded-full uppercase tracking-wider"
+                style={{ color: style.color, background: style.badgeBg, border: `1px solid ${style.border}` }}>
                 {style.label}
               </span>
               <span className="font-mono text-xs text-dim">{award.date}</span>
             </div>
 
-            {/* Title */}
-            <motion.h3
-              className="font-sans font-bold text-xl sm:text-2xl md:text-3xl text-white mb-2 sm:mb-3"
-              animate={{
-                textShadow: hovered ? `0 0 20px ${style.color}30` : "none",
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              {award.title}
-            </motion.h3>
-
-            {/* Issuer */}
-            <div className="font-mono text-xs sm:text-sm mb-4 sm:mb-6" style={{ color: style.color }}>
-              {award.issuer}
-            </div>
-
-            {/* Description */}
-            <p className="text-sm text-muted leading-relaxed mb-6 sm:mb-8">
-              {award.description}
-            </p>
-          </div>
-
-          <div>
-            {/* Footer */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8 font-mono text-[10px] uppercase tracking-wider text-dim">
-              <span style={{ color: style.color }}>{style.label}</span>
-              <span>•</span>
-              <span className="text-green">Verified</span>
-              <span>•</span>
-              <span>{year}</span>
-            </div>
+            {/* Body */}
+            <h3 className="font-sans font-bold text-2xl sm:text-3xl text-white mb-2">{award.title}</h3>
+            <div className="font-mono text-xs sm:text-sm mb-4" style={{ color: style.color }}>{award.issuer}</div>
+            <p className="text-sm text-muted leading-relaxed mb-6 flex-grow">{award.description}</p>
 
             {/* Verify button */}
             {award.certificate && (
@@ -138,11 +114,8 @@ function CredentialCard({ award, index }: { award: typeof awards[0]; index: numb
                   <AnimatePresence mode="wait" initial={false}>
                     <motion.span
                       key={buttonHovered ? "opening" : "verify"}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.1 }}
-                      className="block"
+                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                      transition={{ duration: 0.1 }} className="block"
                     >
                       {buttonHovered ? "Opening..." : "Verify Credential"}
                     </motion.span>
@@ -188,7 +161,7 @@ export default function Awards() {
       </motion.h2>
 
       {/* Grid layout */}
-      <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+      <div className="grid md:grid-cols-2 gap-6 sm:gap-8 auto-rows-fr">
         {awards.map((award, i) => (
           <CredentialCard key={i} award={award} index={i} />
         ))}
